@@ -5,6 +5,8 @@
 #include <iostream>
 #include "matriz.h"
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
  // paramentros de la matiz en x y
 int columna;
@@ -12,7 +14,10 @@ int fila;
 int datos;
 int inserta;
 vector<int> lista;
+vector<int> arreglo;
 int cont = 0;
+int c = 0;
+bool vacio = false;
 
 void crearTablero(int x, int y) {
 
@@ -36,7 +41,38 @@ bool verificador(int n) {
        }
     }
     return false;
+
 }
+void aleatorios()
+{
+    int aux = 0;
+
+    srand(time(0));
+
+    for (int i = 0; i <= datos; i++) {
+        aux = (1 + rand() % datos);
+
+        int aux2 = 0;
+
+        while (aux2 < i) {
+
+            if (aux != arreglo[aux2])
+                aux2++;
+
+            else {
+                aux = (0 + rand() % datos);
+                aux2 = 0;
+
+            }
+        }
+
+        arreglo.push_back(aux);
+
+       // cout << arreglo[i] << "\n";
+    }
+  
+}
+
 
 void menutablero() {
     MatrizOrtogonal* matriz;
@@ -72,37 +108,66 @@ void menutablero() {
                 {
                     cout << "Ingrese dato en la posicion "<<i<<" , "<<a <<endl;
                     cin >> inserta;
-                    if (cont != 0)
+
+                    if (inserta<=datos)
                     {
-                       
-                        if (verificador(inserta) == false)
+                        if (cont != 0)
                         {
-                           
+
+                            if (verificador(inserta) == false)
+                            {
+                                if (vacio == false && cont == datos)
+                                {
+                                   
+                                    cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
+                                    matriz->insertar(i, a, 0);
+                                    cont++;
+                                }
+                                else {
+                                    lista.push_back(inserta);
+                                    matriz->insertar(i, a, inserta);
+                                    cont++;
+                                    if (inserta == 0)
+                                    {
+                                        vacio = true;
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                a--;
+                            }
+
+                        }
+                        else {
+
                             lista.push_back(inserta);
                             matriz->insertar(i, a, inserta);
                             cont++;
+                            if (inserta == 0)
+                            {
+                                vacio = true;
+                            }
                         }
-                        else
-                        {
-                            a--;
-                        }
-
                     }
-                    else {
-                        
-                        lista.push_back(inserta);
-                        matriz->insertar(i, a, inserta);
-                        cont++;
+                    else
+                    {
+                        cout << "UNICAMENTE PUEDE INGRESAR DATOS MENORES A "<<datos<<endl;
+                        a--;
                     }
                     
                 }
             }
+ 
+            matriz->imprimir();
+            system("pause");
             break;
 
         case 2:
             // Lista de instrucciones de la opción 2                
-
-            system("pause>nul"); // Pausa
+            
+       
             break;
 
         case 3:
@@ -112,8 +177,20 @@ void menutablero() {
             cout << "Ingrese Numero de Columnas" << endl;
             cin >> columna;
             crearTablero(fila, columna);
+            aleatorios();
+           
+            for (int i = 0; i < fila; i++)
+            {
+                for (int a = 0; a < columna; a++)
+                {
+                    matriz->insertar(i, a, arreglo[c]);
+                    c++;
 
-            system("pause>nul"); // Pausa            
+                }
+            }
+            
+            matriz->imprimir();
+            system("pause");
             break;
 
         case 0:
@@ -168,7 +245,19 @@ void menu() {
 int main()
 {
     menu();
-    std::cout << "Hello World!\n";
+    MatrizOrtogonal* matriz;
+    matriz = new MatrizOrtogonal();
+  /* matriz->insertar(0, 0, 1);
+    matriz->insertar(0, 1, 2);
+    matriz->insertar(0, 2, 3);
+    matriz->insertar(1, 0, 4);
+    matriz->insertar(1, 1, 5);
+    matriz->insertar(1, 2, 6);
+    matriz->insertar(2, 0, 7);
+    matriz->insertar(2, 1, 8);
+    matriz->insertar(2, 2, 0);
+    
+    std::cout << "Hello World!\n";*/ 
    
 
    

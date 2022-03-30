@@ -7,6 +7,8 @@
 using namespace std;
 
 ///// NODO DEL CENTRO
+
+/* Esta esctructura es la que inicializa cada nodo nuevo*/ 
 typedef struct NodoCen
 {
     int dato;
@@ -29,17 +31,19 @@ typedef struct NodoCen
 } NodoCen;
 
 ////// LISTA QUE COMPONE LA COLUMNA
+/*Esta estructura inserta un espacio a la matriz*/
 typedef struct ListaNodosCol
 {
     NodoCen* primero;
     NodoCen* ultimo;
 
+    //Constructor
     ListaNodosCol()
     {
         primero = NULL;
         ultimo = NULL;
     }
-
+    // Verifica si esta vacio
     bool vacio()
     {
         if (primero == NULL)
@@ -51,7 +55,7 @@ typedef struct ListaNodosCol
             return false;
         }
     }
-
+    // Recorre la lista
     void recorrer()
     {
         if (!vacio())
@@ -59,12 +63,34 @@ typedef struct ListaNodosCol
             NodoCen* temporal = primero;
             while (temporal != NULL)
             {
+                //cout << temporal->dato << " ";
                 temporal = temporal->abajo;
             }
         }
     }
-
-    // insertar
+    //imprimela lista
+    void imprimir()
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato<10)
+                {
+                    cout << "| " << temporal->dato << "   |  ";
+                }
+                else
+                {
+                    cout << "| " << temporal->dato << "  |  ";
+                }
+                
+                
+                temporal = temporal->abajo;
+            }
+        }
+    }
+    // Metodo Insertar
     void insertar(NodoCen* inserta)
     {
         if (vacio())
@@ -75,22 +101,23 @@ typedef struct ListaNodosCol
         {
             if (inserta->y < primero->y)
             {
-                insertarFrente(inserta);
+                insertarFrente(inserta); // si la pos en y del nuevo nodo es menor a la pos en y del primer nodo se inserta al frente
             }
             else if (inserta->y > ultimo->y)
             {
-                insertarFinal(inserta);
+                insertarFinal(inserta); // si la pos en y del nuevo nodo es mayor a la pos en y del primer nodo se inserta al final
             }
             else
 
             {
-                insertarMedio(inserta);
+                insertarMedio(inserta);// sino inserta en el medio
             }
         }
     }
 
-    // insetar frente
-
+    /*
+        Metodos para Insertar
+    */
     void insertarFrente(NodoCen* inserta)
     {
         primero->arriba = inserta;
@@ -115,19 +142,22 @@ typedef struct ListaNodosCol
             temporal1 = temporal1->abajo;
         }
         temporal2 = temporal1->arriba;
-        /// OJO
         temporal2->abajo = inserta;
         temporal1->arriba = inserta;
         inserta->abajo = temporal1;
         inserta->arriba = temporal2;
     }
+
 } ListaNodosCol;
 
 ////////// LISTA QUE COMPONE LA FILA
+/*Esta estructura inserta un espacio a la matriz */
 typedef struct ListaNodosFil
 {
     NodoCen* primero;
     NodoCen* ultimo;
+
+    // Constructor
 
     ListaNodosFil()
     {
@@ -135,6 +165,7 @@ typedef struct ListaNodosFil
         ultimo = NULL;
     }
 
+    // Verificador
     bool vacio()
     {
         if (primero == NULL)
@@ -146,6 +177,8 @@ typedef struct ListaNodosFil
             return false;
         }
     }
+
+    // Recorre la fila
     void recorrer()
     {
         if (!vacio())
@@ -153,12 +186,13 @@ typedef struct ListaNodosFil
             NodoCen* temporal = primero;
             while (temporal != NULL)
             {
+                cout << temporal->dato << " ";
                 temporal = temporal->derecha;
             }
         }
     }
 
-    // insertar
+    // Metodo de Insertar
     void insertar(NodoCen* inserta)
     {
         if (vacio())
@@ -169,20 +203,21 @@ typedef struct ListaNodosFil
         {
             if (inserta->x < primero->x)
             {
-                insertarFrente(inserta);
+                insertarFrente(inserta);  // si la pos en X del nuevo nodo es menor a la pos en X del primer nodo se inserta al frente
             }
             else if (inserta->x > ultimo->x)
             {
-                insertarFinal(inserta);
+                insertarFinal(inserta); // si la pos en X del nuevo nodo es mayor a la pos en X del primer nodo se inserta al final
             }
             else
             {
-                insertarMedio(inserta);
+                insertarMedio(inserta); //sino inserta en medio
             }
         }
     }
-    //
-
+    /*
+        Metodos para Insertar
+    */
     void insertarFrente(NodoCen* inserta)
     {
         primero->izquierda = inserta;
@@ -198,7 +233,7 @@ typedef struct ListaNodosFil
         ultimo = ultimo->derecha;
     }
 
-    //
+    
 
     void insertarMedio(NodoCen* inserta)
     {
@@ -211,7 +246,7 @@ typedef struct ListaNodosFil
             temporal1 = temporal1->derecha;
         }
         temporal2 = temporal1->izquierda;
-        temporal2->derecha = inserta; // OJOOOO
+        temporal2->derecha = inserta; 
         temporal1->izquierda = inserta;
         inserta->derecha = temporal1;
         inserta->izquierda = temporal2;
@@ -220,6 +255,7 @@ typedef struct ListaNodosFil
 } ListaNodosFil;
 
 /////// NODOS DE CABECERA
+/*Esta estructura define el nodo cabecera que nos indica el inicio y fin de una columna*/
 typedef struct NodoCab
 {
     int x;
@@ -236,7 +272,8 @@ typedef struct NodoCab
     }
 } NodoCab;
 
-//                                                                          /// LISTA DE NODOS CABECERAS
+////// LISTA DE NODOS CABECERAS
+/*Esta esctrucutra inserta los espacios del primero hasta el ultimo, y es el guia para las columnas*/
 typedef struct Cabeceras
 {
     NodoCab* primero;
@@ -320,7 +357,24 @@ typedef struct Cabeceras
             NodoCab* temporal = primero;
             while (temporal != NULL)
             {
-               // cout << "Cabecera=" << temporal->x << endl;
+                //cout << "Cabecera=" << temporal->x << endl;
+                //temporal->Columna->imprimir();
+                temporal = temporal->siguiente;
+            }
+        }
+    }
+    //imprimir
+    void imprimir()
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            cout << "---------------" << endl;
+            while (temporal != NULL)
+            {
+                //cout << "Cabecera=" << temporal->x << endl;
+                temporal->Columna->imprimir();
+                cout << endl;
                 temporal = temporal->siguiente;
             }
         }
@@ -375,6 +429,7 @@ typedef struct Cabeceras
 }Cabeceras;
 
 /// NODO LATERAL
+/*Esta estructura define el nodo lateral que nos indica el inicio y fin de una fila*/
 typedef struct NodoLat
 {
     int y;
@@ -390,8 +445,8 @@ typedef struct NodoLat
     }
 } NodoLat;
 
-//
 ///// LISTA DE NODOS LATERALES
+/*Esta esctrucutra inserta los espacios del primero hasta el ultimo, y es el guia para las filas*/
 typedef struct Laterales
 {
     NodoLat* primero;
@@ -479,7 +534,8 @@ typedef struct Laterales
             while (temporal != NULL)
             {
 
-                cout << "Filas=" << temporal->y << endl;
+                //cout << "Filas=" << temporal->y << endl;
+                temporal->Filas->recorrer();
                 temporal = temporal->siguiente;
             }
         }
@@ -532,7 +588,8 @@ typedef struct Laterales
     }
 }Laterales;
 
-//////                                                                                                                                                 //////// MATRIZ ORTOGONAL
+///// MATRIZ ORTOGONAL
+/*Esta estructura es el conjunto de todos los nodos creados: matriz*/
 typedef struct MatrizOrtogonal
 {
     
@@ -557,12 +614,18 @@ typedef struct MatrizOrtogonal
             l->insertar(new NodoLat(y));
         }
         NodoCab* CabTemp;
-        NodoLat* LatTemp;
+        NodoLat* LatTemp; 
         CabTemp = c->busqueda(x);
         LatTemp = l->busqueda(y);
         CabTemp->Columna->insertar(insercion);
         LatTemp->Filas->insertar(insercion);
-        cout << "Se insertó el valor: " << inserta << "<--- en la columna " << x << ", fila " << y << endl;
+        cout << "Se inserto el valor: " << inserta << "<--- en la columna " << x << ", fila " << y << endl;
+    }
+
+    void imprimir()
+    {
+        
+        c->imprimir();
     }
 
 
