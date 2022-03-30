@@ -5,7 +5,9 @@
 
 
 using namespace std;
-
+int xx;
+int yy;
+bool aceptar;
 ///// NODO DEL CENTRO
 
 /* Esta esctructura es la que inicializa cada nodo nuevo*/ 
@@ -13,16 +15,18 @@ typedef struct NodoCen
 {
     int dato;
     int x, y;
+    bool pivote;
     // PUNTEROS
     NodoCen* arriba;
     NodoCen* abajo;
     NodoCen* izquierda;
     NodoCen* derecha;
-    NodoCen(int dato, int x, int y)
+    NodoCen(int dato, int x, int y,bool pivote)
     {
         this->dato = dato;
         this->x = x;
         this->y = y;
+        this->pivote = pivote;
         arriba = NULL;
         abajo = NULL;
         izquierda = NULL;
@@ -89,6 +93,116 @@ typedef struct ListaNodosCol
                 temporal = temporal->abajo;
             }
         }
+    }
+    //buscar nodo a mover pivote a numero
+    bool moverPivote(int n)
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->pivote==true)
+                {
+                    //moverNodo(n);
+                    xx = temporal->x;
+                    yy = temporal->y;
+
+                    temporal->pivote = false;
+                    temporal->dato = n;
+
+                    return true;
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return false;
+
+    }
+    bool moverNodo(int n) //numero a pivote
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato == n )
+                {
+
+                    if ((temporal->x != xx) || (temporal->y != yy))
+                    {
+
+                        temporal->pivote = true;
+                        temporal->dato = 0;
+                        return true;
+                    }
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return false;
+    }
+    bool verificar(int n)
+    {
+        if (!vacio())
+        {
+            int aux = 1;
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->pivote == true)
+                {
+
+                        switch (aux)
+                        {
+                        case 1: 
+                         
+                            if (temporal->arriba!=NULL)
+                            {
+                                if (temporal->arriba->dato == n)
+                                {
+                                    return true;
+                                }
+                            }
+                            
+                        case 2:
+                        
+                            if (temporal->abajo != NULL)
+                            {
+                                if (temporal->abajo->dato == n)
+                                {
+                                    return true;
+                                }
+                            }
+                        case 3:
+                           
+                            if (temporal->izquierda != NULL)
+                            {
+                                if (temporal->izquierda->dato == n)
+                                {
+                                    return true;
+                                }
+                            }
+                        case 4:
+                          
+                            if (temporal->derecha != NULL)
+                            {
+                                if (temporal->derecha->dato == n)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                        
+                    return false;
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return false;
     }
     // Metodo Insertar
     void insertar(NodoCen* inserta)
@@ -425,6 +539,58 @@ typedef struct Cabeceras
            // cout << "no existe" << endl;
             return(new NodoCab(-1));
         }
+
+    }
+    //metodo para mover nodo
+    void moverPivote(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->moverPivote(n) != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                
+            }
+        }
+    }
+    void moverNodo(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->moverNodo(n) != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+
+            }
+        }
+    }
+    //
+    bool verificador(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->verificar(n) != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                else { return true; }
+            }
+        }
+        return false;
     }
 }Cabeceras;
 
@@ -601,10 +767,10 @@ typedef struct MatrizOrtogonal
         c = new Cabeceras();
         l = new Laterales();
     }
-    void insertar(int x, int y, int inserta)
+    void insertar(int x, int y, int inserta, bool pivote)
     {
         NodoCen* insercion;
-        insercion = new NodoCen(inserta, x, y);
+        insercion = new NodoCen(inserta, x, y, pivote);
         if (c->existe(x) == false)
         {
             c->insertar(new NodoCab(x));
@@ -626,6 +792,22 @@ typedef struct MatrizOrtogonal
     {
         
         c->imprimir();
+        
+    }
+    void movimiento(int n)
+    {
+       if (c->verificador(n) == true)
+        {
+            c->moverPivote(n);
+            c->moverNodo(n);
+        }
+        else
+        {
+            cout << "No se acepta ese movimiento" << endl;
+        }
+        //c->moverPivote(n);
+       // c->moverNodo(n);
+
     }
 
 

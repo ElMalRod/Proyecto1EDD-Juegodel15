@@ -13,6 +13,7 @@ int columna;
 int fila;
 int datos;
 int inserta;
+int n;
 vector<int> lista;
 vector<int> arreglo;
 int cont = 0;
@@ -27,7 +28,6 @@ void crearTablero(int x, int y) {
     
 
 }
-
 bool verificador(int n) {
 
     for (int i = 0; i < lista.size(); i++) {
@@ -120,17 +120,19 @@ void menutablero() {
                                 {
                                    
                                     cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
-                                    matriz->insertar(i, a, 0);
+                                    matriz->insertar(i, a, 0, true);
                                     cont++;
                                 }
                                 else {
                                     lista.push_back(inserta);
-                                    matriz->insertar(i, a, inserta);
+                                    
                                     cont++;
                                     if (inserta == 0)
                                     {
                                         vacio = true;
+                                        matriz->insertar(i, a, inserta,true);
                                     }
+                                    else { matriz->insertar(i, a, inserta,false); }
                                 }
 
                             }
@@ -143,12 +145,13 @@ void menutablero() {
                         else {
 
                             lista.push_back(inserta);
-                            matriz->insertar(i, a, inserta);
                             cont++;
                             if (inserta == 0)
                             {
                                 vacio = true;
+                                matriz->insertar(i, a, inserta, true);
                             }
+                            else { matriz->insertar(i, a, inserta, false); }
                         }
                     }
                     else
@@ -183,13 +186,42 @@ void menutablero() {
             {
                 for (int a = 0; a < columna; a++)
                 {
-                    matriz->insertar(i, a, arreglo[c]);
+                    if (arreglo[c] == 0)
+                    {
+                        vacio = true;
+                        matriz->insertar(i, a, arreglo[c], true);
+                    }
+                    else { matriz->insertar(i, a, arreglo[c], false); }
                     c++;
 
                 }
             }
-            
+            cout << "-----LISTO PARA JUGAR!!!-----" << endl;
             matriz->imprimir();
+            cout << "---------------------------------" << endl;
+            cout << "Ingrese Numero que desea mover" << endl;
+            cin >> n;
+            matriz->movimiento(n);
+            matriz->imprimir();
+
+            system("pause");
+            cout << "Ingrese Numero que desea mover" << endl;
+            cin >> n;
+            matriz->movimiento(n);
+            matriz->imprimir();
+
+            system("pause");
+            cout << "Ingrese Numero que desea mover" << endl;
+            cin >> n;
+            matriz->movimiento(n);
+            matriz->imprimir();
+
+            system("pause");
+            cout << "Ingrese Numero que desea mover" << endl;
+            cin >> n;
+            matriz->movimiento(n);
+            matriz->imprimir();
+
             system("pause");
             break;
 
