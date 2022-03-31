@@ -16,17 +16,19 @@ typedef struct NodoCen
     int dato;
     int x, y;
     bool pivote;
+    int posxy;
     // PUNTEROS
     NodoCen* arriba;
     NodoCen* abajo;
     NodoCen* izquierda;
     NodoCen* derecha;
-    NodoCen(int dato, int x, int y,bool pivote)
+    NodoCen(int dato, int x, int y,bool pivote, int posxy)
     {
         this->dato = dato;
         this->x = x;
         this->y = y;
         this->pivote = pivote;
+        this->posxy = posxy;
         arriba = NULL;
         abajo = NULL;
         izquierda = NULL;
@@ -203,6 +205,32 @@ typedef struct ListaNodosCol
             }
         }
         return false;
+    }
+
+    //sumar puntos
+    int sumarPuntosC(int c)
+    {
+        int puntos=0;
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato == temporal->posxy)
+                {
+                    puntos = puntos + 1;
+
+                }
+                if (temporal->dato==0 && temporal->posxy==c)
+                {
+                    puntos = puntos + 1;
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return puntos;
+
     }
     // Metodo Insertar
     void insertar(NodoCen* inserta)
@@ -592,6 +620,22 @@ typedef struct Cabeceras
         }
         return false;
     }
+    //encontrar punteo
+    int sumarPunteo(int cc)
+    {
+        int puntos=0;
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                puntos = puntos + temporal->Columna->sumarPuntosC(cc);
+                temporal = temporal->siguiente;
+
+            }
+        }
+            return puntos;
+    }
 }Cabeceras;
 
 /// NODO LATERAL
@@ -767,10 +811,10 @@ typedef struct MatrizOrtogonal
         c = new Cabeceras();
         l = new Laterales();
     }
-    void insertar(int x, int y, int inserta, bool pivote)
+    void insertar(int x, int y, int inserta, bool pivote, int posxy)
     {
         NodoCen* insercion;
-        insercion = new NodoCen(inserta, x, y, pivote);
+        insercion = new NodoCen(inserta, x, y, pivote, posxy);
         if (c->existe(x) == false)
         {
             c->insertar(new NodoCab(x));
@@ -808,6 +852,12 @@ typedef struct MatrizOrtogonal
         //c->moverPivote(n);
        // c->moverNodo(n);
 
+    }
+    int puntos(int cc)
+    {
+        int puntos=0;
+        puntos=c->sumarPunteo(cc);
+        return puntos;
     }
 
 

@@ -4,21 +4,29 @@
 
 #include <iostream>
 #include "matriz.h"
+#include "Jugador.h"
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <string>
+#include <stdio.h>
 
  // paramentros de la matiz en x y
-int columna;
-int fila;
-int datos;
-int inserta;
-int n;
+int columna = 0;
+int fila = 0;;
+int datos = 0;;
+int inserta = 0;;
+int n = 0;;
+string n1;
 vector<int> lista;
 vector<int> arreglo;
 int cont = 0;
 int c = 0;
 bool vacio = false;
+bool jugar = true;
+int pasos = 0;
+
+int correcto = 1;
 
 void crearTablero(int x, int y) {
 
@@ -72,11 +80,237 @@ void aleatorios()
     }
   
 }
+void juegoAleatorio()
+{
+    MatrizOrtogonal* matriz;
+    MatrizOrtogonal* matrizInicial;
+    string nombre;
+    int puntos;
 
+    matriz = new MatrizOrtogonal();
+    matrizInicial = new MatrizOrtogonal();
+
+    //
+    cout << "Ingrese Nombre del Jugador" << endl;
+    cin >> nombre;
+    cout << "Ingrese Numero de Filas" << endl;
+    cin >> fila;
+    cout << "Ingrese Numero de Columnas" << endl;
+    cin >> columna;
+
+    crearTablero(fila, columna);
+    aleatorios();
+    Jugador j=  Jugador();
+    j.ingresardatos(nombre, 0, 0);
+    //limpiar variables
+    correcto = 1;
+    pasos = 0;
+    c = 0;
+    jugar = true;
+    for (int i = 0; i < fila; i++)
+    {
+        for (int a = 0; a < columna; a++)
+        {
+            if (arreglo[c] == 0)
+            {
+                vacio = true;
+                matriz->insertar(i, a, arreglo[c], true,correcto);
+                matrizInicial->insertar(i, a, arreglo[c], true, correcto);
+
+            }
+            else { matriz->insertar(i, a, arreglo[c], false,correcto);
+            matrizInicial->insertar(i, a, arreglo[c], false, correcto);
+            }
+            correcto++;
+            c++;
+
+        }
+    }
+    cout << "-----LISTO PARA JUGAR!!!-----" << endl;
+    matriz->imprimir();
+    //cout << "---------------------------------" << endl;
+    while (jugar == true)
+    {
+        cout << "Ingrese Numero que desea mover " << endl;    cout << "                                                    PRESIONE R para Reiniciar " << endl;
+        cout << "                                                    PRESIONE S para Terminar " << endl;
+        cin >> n1;
+
+        if (n1 == "R" || n1 == "r")
+        {
+            cout << "Juego reiniciado" << endl;
+            matriz = matrizInicial;
+            matriz->imprimir();
+            //aqui se reiniciarian los punto tambien
+        }
+        else if (n1 == "S" || n1 == "s")
+        {
+            cout << "----- GAME END!!!! -----" << endl;
+            cout << "NOMBRE: " << j.nombre<<endl;
+            cout << "PUNTOS: " << j.puntos << endl;
+            cout << "PASOS: " << pasos << endl;
+            cout << "TIEMPO: " << j.tiempo << endl;
+            jugar = false;
+        }
+        else {
+            int num = stoi(n1);
+            matriz->movimiento(num);
+            pasos++;
+            j.ingresarPuntos(matriz->puntos(datos + 1));
+            matriz->imprimir();
+            cout << "Pasos: " <<pasos<< endl;
+            //j.imprimirdatos();
+            
+
+        }
+
+
+    }
+
+}
+void juegoManual()
+{
+    MatrizOrtogonal* matriz;
+    MatrizOrtogonal* matrizInicial;
+    string nombre;
+    matriz = new MatrizOrtogonal();
+    matrizInicial = new MatrizOrtogonal();
+    correcto = 0;
+    cout << "Ingrese Nombre del Jugador" << endl;
+    cin >> nombre;
+    cout << "Ingrese Numero de Filas" << endl;
+    cin >> fila;
+    cout << "Ingrese Numero de Columnas" << endl;
+    cin >> columna;
+
+    crearTablero(fila, columna);
+    aleatorios();
+    Jugador j = Jugador();
+    j.ingresardatos(nombre, 0, 0);
+    //limpiar variables
+    correcto = 1;
+    pasos = 0;
+    c = 0;
+    jugar = true;
+    cout << "RECUERDE MARCAR UN ESPACIO VACIO CON 0" << endl;
+    for (int i = 0; i < fila; i++)
+    {
+        for (int a = 0; a < columna; a++)
+        {
+            cout << "Ingrese dato en la posicion " << i << " , " << a << endl;
+            cin >> inserta;
+
+            if (inserta <= datos)
+            {
+                if (cont != 0)
+                {
+
+                    if (verificador(inserta) == false)
+                    {
+                        if (vacio == false && cont == datos)
+                        {
+
+                            cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
+                            correcto++;
+                            matriz->insertar(i, a, 0, true,correcto);
+                            matrizInicial->insertar(i, a, 0, true, correcto);
+                            cont++;
+                            
+                        }
+                        else {
+                            lista.push_back(inserta);
+
+                            cont++;
+                            correcto++;
+                            if (inserta == 0)
+                            {
+                                vacio = true;
+                                matriz->insertar(i, a, inserta, true,correcto);
+                                matrizInicial->insertar(i, a, inserta, true, correcto);
+                            }
+                            else { matriz->insertar(i, a, inserta, false, correcto);
+                                 matrizInicial->insertar(i, a, inserta, false, correcto);
+                            
+                            }
+                        }
+
+
+                    }
+                    else
+                    {
+                        a--;
+                    }
+
+                }
+                else {
+
+                    lista.push_back(inserta);
+                    cont++;
+                    correcto++;
+                    if (inserta == 0)
+                    {
+                        vacio = true;
+                        matriz->insertar(i, a, inserta, true,correcto);
+                        matrizInicial->insertar(i, a, inserta, true, correcto);
+                    }
+                    else { matriz->insertar(i, a, inserta, false,correcto);
+                    matrizInicial->insertar(i, a, inserta, false, correcto);
+                    }
+                }
+            }
+            else
+            {
+                cout << "UNICAMENTE PUEDE INGRESAR DATOS MENORES A " << datos << endl;
+                a--;
+            }
+
+        }
+    }
+    cout << "-----LISTO PARA JUGAR!!!-----" << endl;
+    matriz->imprimir();
+    //cout << "---------------------------------" << endl;
+    while (jugar == true)
+    {
+        cout << "Ingrese Numero que desea mover " << endl;    cout << "                                                    PRESIONE R para Reiniciar " << endl;
+        cout << "                                                    PRESIONE S para Terminar " << endl;
+        cin >> n1;
+
+        if (n1 == "R" || n1 == "r")
+        {
+            cout << "Juego reiniciado" << endl;
+            matriz = matrizInicial;
+            matriz->imprimir();
+            //aqui se reiniciarian los punto tambien
+        }
+        else if (n1 == "S" || n1 == "s")
+        {
+            cout << "----- GAME END!!!! -----" << endl;
+            cout << "NOMBRE: " << j.nombre << endl;
+            cout << "PUNTOS: " << j.puntos << endl;
+            cout << "PASOS: " << pasos;
+            cout << "TIEMPO: " << j.tiempo << endl;
+            jugar = false;
+        }
+        else {
+            int num = stoi(n1);
+            matriz->movimiento(num);
+            pasos++;
+            j.ingresarPuntos(matriz->puntos(datos + 1));
+            matriz->imprimir();
+            cout << "Pasos: " << pasos << endl;
+            //j.imprimirdatos();
+
+
+        }
+
+
+    }
+
+
+}
 
 void menutablero() {
-    MatrizOrtogonal* matriz;
-    matriz = new MatrizOrtogonal();
+    
+    //matrizInicial = new MatrizOrtogonal();
     int opcion;
     bool repetir = true;
     
@@ -96,74 +330,7 @@ void menutablero() {
         switch (opcion) {
         case 1:
             // Lista de instrucciones de la opción 1   
-            cout << "Ingrese Numero de Filas" << endl;
-            cin >> fila;
-            cout << "Ingrese Numero de Columnas" << endl;
-            cin >> columna;
-            crearTablero(fila , columna);
-            cout << "RECUERDE MARCAR UN ESPACIO VACIO CON 0" << endl;
-            for (int i = 0; i < fila; i++)
-            {
-                for (int a = 0; a < columna; a++)
-                {
-                    cout << "Ingrese dato en la posicion "<<i<<" , "<<a <<endl;
-                    cin >> inserta;
-
-                    if (inserta<=datos)
-                    {
-                        if (cont != 0)
-                        {
-
-                            if (verificador(inserta) == false)
-                            {
-                                if (vacio == false && cont == datos)
-                                {
-                                   
-                                    cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
-                                    matriz->insertar(i, a, 0, true);
-                                    cont++;
-                                }
-                                else {
-                                    lista.push_back(inserta);
-                                    
-                                    cont++;
-                                    if (inserta == 0)
-                                    {
-                                        vacio = true;
-                                        matriz->insertar(i, a, inserta,true);
-                                    }
-                                    else { matriz->insertar(i, a, inserta,false); }
-                                }
-
-                            }
-                            else
-                            {
-                                a--;
-                            }
-
-                        }
-                        else {
-
-                            lista.push_back(inserta);
-                            cont++;
-                            if (inserta == 0)
-                            {
-                                vacio = true;
-                                matriz->insertar(i, a, inserta, true);
-                            }
-                            else { matriz->insertar(i, a, inserta, false); }
-                        }
-                    }
-                    else
-                    {
-                        cout << "UNICAMENTE PUEDE INGRESAR DATOS MENORES A "<<datos<<endl;
-                        a--;
-                    }
-                    
-                }
-            }
- 
-            matriz->imprimir();
+            juegoManual();
             system("pause");
             break;
 
@@ -175,53 +342,8 @@ void menutablero() {
 
         case 3:
             // Lista de instrucciones de la opción 3   
-            cout << "Ingrese Numero de Filas" << endl;
-            cin >> fila;
-            cout << "Ingrese Numero de Columnas" << endl;
-            cin >> columna;
-            crearTablero(fila, columna);
-            aleatorios();
-           
-            for (int i = 0; i < fila; i++)
-            {
-                for (int a = 0; a < columna; a++)
-                {
-                    if (arreglo[c] == 0)
-                    {
-                        vacio = true;
-                        matriz->insertar(i, a, arreglo[c], true);
-                    }
-                    else { matriz->insertar(i, a, arreglo[c], false); }
-                    c++;
-
-                }
-            }
-            cout << "-----LISTO PARA JUGAR!!!-----" << endl;
-            matriz->imprimir();
-            cout << "---------------------------------" << endl;
-            cout << "Ingrese Numero que desea mover" << endl;
-            cin >> n;
-            matriz->movimiento(n);
-            matriz->imprimir();
-
-            system("pause");
-            cout << "Ingrese Numero que desea mover" << endl;
-            cin >> n;
-            matriz->movimiento(n);
-            matriz->imprimir();
-
-            system("pause");
-            cout << "Ingrese Numero que desea mover" << endl;
-            cin >> n;
-            matriz->movimiento(n);
-            matriz->imprimir();
-
-            system("pause");
-            cout << "Ingrese Numero que desea mover" << endl;
-            cin >> n;
-            matriz->movimiento(n);
-            matriz->imprimir();
-
+            juegoAleatorio();
+            
             system("pause");
             break;
 
