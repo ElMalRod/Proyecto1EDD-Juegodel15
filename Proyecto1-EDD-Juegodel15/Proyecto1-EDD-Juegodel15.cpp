@@ -5,7 +5,7 @@
 #include <iostream>
 #include "matriz.h"
 #include "Jugador.h"
-#include <vector>
+#include "Lista.h"
 #include <cstdlib>
 #include <ctime>
 #include <string>
@@ -18,8 +18,9 @@ int datos = 0;;
 int inserta = 0;;
 int n = 0;;
 string n1;
-vector<int> lista;
-vector<int> arreglo;
+Lista listaManual= Lista(); // Lista donde se guardan los numero de manual para no aceptar repetidos.
+Lista listaAle = Lista();// Lista donde se guardan los numeros aleatoreos
+Lista listaInicial = Lista();// Lista donde se guardan los numeros de la matriz inicial para poder reinciar.
 int cont = 0;
 int c = 0;
 bool vacio = false;
@@ -39,9 +40,9 @@ void crearTablero(int x, int y) {
 
 bool verificador(int n) {
 
-    for (int i = 0; i < lista.size(); i++) {
+    for (int i = 0; i < listaManual.tamanio; i++) {
        //cout << lista[i] << endl;
-       if (n == lista[i])
+       if (n == listaManual.ObtenerXpos(i))
        {
            cout << "NO SE PERMITE NUMEROS REPETIDOS" << endl;
          
@@ -96,6 +97,7 @@ void ganar(Jugador j) {
 
 void aleatorios()
 {
+    
     int aux = 0;
 
     srand(time(0));
@@ -107,7 +109,7 @@ void aleatorios()
 
         while (aux2 < i) {
 
-            if (aux != arreglo[aux2])
+            if (aux != listaAle.ObtenerXpos(aux2))
                 aux2++;
 
             else {
@@ -117,7 +119,7 @@ void aleatorios()
             }
         }
 
-        arreglo.push_back(aux);
+        listaAle.InsertarFinal(aux);
 
        // cout << arreglo[i] << "\n";
     }
@@ -127,12 +129,10 @@ void aleatorios()
 void juegoAleatorio()
 {
     MatrizOrtogonal* matriz;
-    MatrizOrtogonal* matrizInicial;
     string nombre;
     int puntos=0;
 
     matriz = new MatrizOrtogonal();
-    matrizInicial = new MatrizOrtogonal();
 
     //
     cout << "Ingrese Nombre del Jugador" << endl;
@@ -143,6 +143,8 @@ void juegoAleatorio()
     cin >> columna;
 
     crearTablero(fila, columna);
+    listaAle.limpiar();
+    listaInicial.limpiar();
     aleatorios();
     Jugador j=  Jugador();
     j.ingresardatos(nombre, 0, 0);
@@ -155,15 +157,14 @@ void juegoAleatorio()
     {
         for (int a = 0; a < columna; a++)
         {
-            if (arreglo[c] == 0)
+            if (listaAle.ObtenerXpos(c) == 0)
             {
                 vacio = true;
-                matriz->insertar(i, a, arreglo[c], true,correcto);
-                matrizInicial->insertar(i, a, arreglo[c], true, correcto);
+                matriz->insertar(i, a, listaAle.ObtenerXpos(c), true,correcto);
+
 
             }
-            else { matriz->insertar(i, a, arreglo[c], false,correcto);
-            matrizInicial->insertar(i, a, arreglo[c], false, correcto);
+            else { matriz->insertar(i, a, listaAle.ObtenerXpos(c), false,correcto);
             }
             correcto++;
             c++;
@@ -174,6 +175,7 @@ void juegoAleatorio()
     // Code to execute
     cout << "-----LISTO PARA JUGAR!!!-----" << endl;
     matriz->imprimir();
+    j.ingresarPuntos(matriz->puntosFuncion(datos + 1));
     //cout << "---------------------------------" << endl;
     while (jugar == true)
     {
@@ -183,11 +185,35 @@ void juegoAleatorio()
 
         if (n1 == "R" || n1 == "r")
         {
-            cout << "Juego reiniciado" << endl;
-            matriz = matrizInicial;
-            matriz->imprimir();
+            
+            matriz->eliminar(); //eliminar matriz actual
+            matriz = new MatrizOrtogonal();
+            c = 0;//limpiar contador
+            correcto = 1;//
+            //vacio = true;
+            //inserta datos de la matriz inicial
+            for (int i = 0; i < fila; i++)
+            {
+                for (int a = 0; a < columna; a++)
+                {
+                    if (listaAle.ObtenerXpos(c) == 0)
+                    {
+                        vacio = true;
+                        matriz->insertar(i, a, listaAle.ObtenerXpos(c), true, correcto);
+                    }
+                    else {
+                        matriz->insertar(i, a, listaAle.ObtenerXpos(c), false, correcto);
+                    }
+                    correcto++;
+                    c++;
+
+                }
+            }
+            cout << "-------Juego reiniciado--------" << endl;
             pasos = 0;
-            //aqui se reiniciarian los punto tambien
+            matriz->imprimir();
+            //aqui se reinician los puntos tambien
+            j.ingresarPuntos(matriz->puntosFuncion(datos + 1));
         }
         else if (n1 == "S" || n1 == "s")
         {
@@ -200,6 +226,7 @@ void juegoAleatorio()
             cout << "PASOS: " << pasos << endl;
             cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
             jugar = false;
+            matriz->eliminar();
         }
         else {
             int num = stoi(n1);
@@ -227,7 +254,6 @@ void juegoManual()
     string nombre;
     int puntos = 0;
     matriz = new MatrizOrtogonal();
-    matrizInicial = new MatrizOrtogonal();
     
     cout << "Ingrese Nombre del Jugador" << endl;
     cin >> nombre;
@@ -244,7 +270,10 @@ void juegoManual()
     pasos = 0;
     c = 0;
     jugar = true;
+    listaManual.limpiar();
+    listaInicial.limpiar();
     cout << "RECUERDE MARCAR UN ESPACIO VACIO CON 0" << endl;
+    //for para ingresar datos
     for (int i = 0; i < fila; i++)
     {
         for (int a = 0; a < columna; a++)
@@ -264,13 +293,13 @@ void juegoManual()
                             cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
                             correcto++;
                             matriz->insertar(i, a, 0, true,correcto);
-                            matrizInicial->insertar(i, a, 0, true, correcto);
+                            listaInicial.InsertarFinal(0);
                             cout << "Se agrego -> "<<inserta<<" en "<<i<<" , "<<a<< endl;
                             cont++;
                             
                         }
                         else {
-                            lista.push_back(inserta);
+                            listaManual.InsertarFinal(inserta);
 
                             cont++;
                             correcto++;
@@ -278,11 +307,11 @@ void juegoManual()
                             {
                                 vacio = true;
                                 matriz->insertar(i, a, inserta, true,correcto);
-                                matrizInicial->insertar(i, a, inserta, true, correcto);
+                                listaInicial.InsertarFinal(inserta);
                                 cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
                             }
                             else { matriz->insertar(i, a, inserta, false, correcto);
-                                 matrizInicial->insertar(i, a, inserta, false, correcto);
+                                 listaInicial.InsertarFinal(inserta);
                                  cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
                             
                             }
@@ -298,17 +327,17 @@ void juegoManual()
                 }
                 else {
 
-                    lista.push_back(inserta);
+                    listaManual.InsertarFinal(inserta);
                     cont++;
                     correcto++;
                     if (inserta == 0)
                     {
                         vacio = true;
                         matriz->insertar(i, a, inserta, true,correcto);
-                        matrizInicial->insertar(i, a, inserta, true, correcto);
+                        listaInicial.InsertarFinal(inserta);
                     }
                     else { matriz->insertar(i, a, inserta, false,correcto);
-                    matrizInicial->insertar(i, a, inserta, false, correcto);
+                    listaInicial.InsertarFinal(inserta);
                     }
                 }
             }
@@ -322,8 +351,8 @@ void juegoManual()
     }
     cout << "-----LISTO PARA JUGAR!!!-----" << endl; 
     matriz->imprimir();
+    j.ingresarPuntos(matriz->puntosFuncion(datos + 1));
     t0 = clock();
-    // Code to execute
     cout << "---------------------------------" << endl;
     while (jugar == true)
     {
@@ -333,11 +362,35 @@ void juegoManual()
 
         if (n1 == "R" || n1 == "r")
         {
-            cout << "Juego reiniciado" << endl;
+            matriz->eliminar(); //eliminar matriz actual
+            matriz = new MatrizOrtogonal();
+            c = 0;//limpiar contador
+            correcto = 1;//
+            //volver a cargar matriz inicial
+            for (int i = 0; i < fila; i++)
+            {
+                for (int a = 0; a < columna; a++)
+                {
+                    if (listaInicial.ObtenerXpos(c) == 0)
+                    {
+                        vacio = true;
+                        matriz->insertar(i, a, listaInicial.ObtenerXpos(c), true, correcto);
+
+
+                    }
+                    else {
+                        matriz->insertar(i, a, listaInicial.ObtenerXpos(c), false, correcto);
+                    }
+                    correcto++;
+                    c++;
+
+                }
+            }
+            cout << "-------Juego reiniciado--------" << endl;
             pasos = 0;
-            matriz = matrizInicial;
             matriz->imprimir();
-            //aqui se reiniciarian los punto tambien
+            //aqui se reinician los puntos tambien
+            j.ingresarPuntos(matriz->puntosFuncion(datos+1));
         }
         else if (n1 == "S" || n1 == "s")
         {
@@ -350,6 +403,7 @@ void juegoManual()
             cout << "PASOS: " << pasos<< endl;
             cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
             jugar = false;
+            matriz->eliminar();
         }
         else {
             int num = stoi(n1);
@@ -467,17 +521,22 @@ int main()
     menu();
     MatrizOrtogonal* matriz;
     matriz = new MatrizOrtogonal();
-  /* matriz->insertar(0, 0, 1);
-    matriz->insertar(0, 1, 2);
-    matriz->insertar(0, 2, 3);
-    matriz->insertar(1, 0, 4);
-    matriz->insertar(1, 1, 5);
-    matriz->insertar(1, 2, 6);
-    matriz->insertar(2, 0, 7);
-    matriz->insertar(2, 1, 8);
-    matriz->insertar(2, 2, 0);
+    /* matriz->insertar(0, 0, 1);
+      matriz->insertar(0, 1, 2);
+      matriz->insertar(0, 2, 3);
+      matriz->insertar(1, 0, 4);
+      matriz->insertar(1, 1, 5);
+      matriz->insertar(1, 2, 6);
+      matriz->insertar(2, 0, 7);
+      matriz->insertar(2, 1, 8);
+      matriz->insertar(2, 2, 0);
+
+      std::cout << "Hello World!\n";*/
+    /*Lista listaA = Lista();
+    cout << "LISTA A:" << endl;
+    listaA.InsertarFinal(87);*/
     
-    std::cout << "Hello World!\n";*/ 
+
    
 
    

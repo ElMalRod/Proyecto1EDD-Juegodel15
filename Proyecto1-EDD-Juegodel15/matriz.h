@@ -84,7 +84,7 @@ typedef struct ListaNodosCol
             {
                 if (temporal->dato<10)
                 {
-                    cout << "| " << temporal->dato << "   |  ";
+                    cout << "| " << temporal->dato << "    |  ";
                 }
                 else
                 {
@@ -520,6 +520,9 @@ typedef struct Cabeceras
                 temporal = temporal->siguiente;
             }
         }
+        else {
+            cout<<"esta vacia" << endl;
+        }
     }
 
     //
@@ -859,7 +862,11 @@ typedef struct MatrizOrtogonal
         puntos=c->sumarPunteo(cc);
         return puntos;
     }
-
+    void eliminar()
+    {
+        c = NULL;
+        l = NULL;
+    }
 
 }MatrizOrtogonal;
 
