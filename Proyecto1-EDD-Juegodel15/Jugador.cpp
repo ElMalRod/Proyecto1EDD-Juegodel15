@@ -10,6 +10,7 @@ Jugador::Jugador()
 	this->nombre="";
 	this->puntos = 0;
 	this->tiempo = 0;
+	this->siguiente = NULL;
 }
 
  void Jugador::ingresardatos(string nombre, int puntos, double tiempo)
@@ -17,6 +18,7 @@ Jugador::Jugador()
 	 this->nombre = nombre;
 	 this->puntos = puntos;
 	 this->tiempo = tiempo;
+	 this->siguiente = NULL;//ojo
 }
 
 void Jugador::ingresarPuntos(int p)
@@ -30,7 +32,6 @@ void Jugador::ingresarTiempo(double p)
 
 void Jugador::imprimirdatos() {
 
-	cout << "NOMBRE						"<<"PUNTOS					"<<"TIEMPO					"<<endl;
-	cout << " "<<nombre <<" "<<puntos << "		"<<tiempo << endl;
+
 
 }

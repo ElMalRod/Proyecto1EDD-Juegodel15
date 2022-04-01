@@ -7,6 +7,11 @@ Lista::Lista()
 	this->final = NULL;
 	this->tamanio = -1;
 }
+Lista::Lista(int n)
+{
+	this->frenteJ = NULL;
+	this->finalJ = NULL;
+}
 string Lista::Recorrer()
 {
 	string c = "";
@@ -28,6 +33,8 @@ string Lista::Recorrer()
 	return c;
 }
 
+
+
 bool Lista::EstaVacia()
 {
 	if (this->frente == NULL && this->final == NULL)
@@ -39,6 +46,35 @@ bool Lista::EstaVacia()
 		return false;
 	}
 }
+
+bool Lista::EstaVaciaJugador()
+{
+	if (this->frente == NULL && this->final == NULL)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+void Lista::RecorrerJugador()
+{
+	cout << "Reportes" << endl;
+	cout << "Nombre->Puntos->Tiempo" << endl;
+	Jugador* aux;
+	aux = this->frenteJ;
+	if (EstaVaciaJugador() == true)
+	{
+		//cout<<"No hay reportes todavia" << endl;
+	}
+	while (aux != NULL)
+	{
+		cout << aux->nombre << "  " << aux->puntos << "  " << aux->tiempo << " seg" << endl;
+		aux = aux->siguiente;
+
+	}
+}
 void Lista::InsertarVacia(int valor)
 {
 	Nodo* nuevo = new Nodo();
@@ -47,6 +83,18 @@ void Lista::InsertarVacia(int valor)
 	this->frente = nuevo;
 	this->final = nuevo;
 	this->tamanio++;
+
+}
+
+void Lista::InsertarVaciaJugador(Jugador j)
+{
+	Jugador* nuevo = new Jugador();
+	nuevo->nombre = j.nombre;
+	nuevo->puntos = j.puntos;
+	nuevo->tiempo = j.tiempo;
+	nuevo->siguiente = this->frenteJ;
+	this->frenteJ = nuevo;
+	this->finalJ = nuevo;
 
 }
 
@@ -65,6 +113,26 @@ void Lista::InsertarFinal(int valor)
 		aux->siguiente = nuevo;
 		this->final = nuevo;
 		this->tamanio++;
+
+	}
+}
+
+void Lista::InsertarFinalJugador(Jugador j)
+{
+	if (EstaVaciaJugador() == true)
+	{
+		InsertarVaciaJugador(j);
+	}
+	else
+	{
+		Jugador* nuevo = new Jugador();
+		nuevo->nombre = j.nombre;
+		nuevo->puntos = j.puntos;
+		nuevo->tiempo = j.tiempo;
+		Jugador* aux;
+		aux = this->finalJ;
+		aux->siguiente = nuevo;
+		this->finalJ = nuevo;
 
 	}
 }

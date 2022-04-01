@@ -21,6 +21,7 @@ string n1;
 Lista listaManual= Lista(); // Lista donde se guardan los numero de manual para no aceptar repetidos.
 Lista listaAle = Lista();// Lista donde se guardan los numeros aleatoreos
 Lista listaInicial = Lista();// Lista donde se guardan los numeros de la matriz inicial para poder reinciar.
+Lista listaReportes = Lista(0);
 int cont = 0;
 int c = 0;
 bool vacio = false;
@@ -88,6 +89,7 @@ void ganar(Jugador j) {
         cout << "PUNTOS: " << j.puntos << endl;
         cout << "PASOS: " << pasos << endl;
         cout << "TIEMPO: " << j.tiempo <<".seg"<< endl;
+        listaReportes.InsertarFinalJugador(j);
         system("pause");
         jugar = false;
     }
@@ -225,6 +227,7 @@ void juegoAleatorio()
             cout << "PUNTOS: " << j.puntos << endl;
             cout << "PASOS: " << pasos << endl;
             cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
+            listaReportes.InsertarFinalJugador(j);
             jugar = false;
             matriz->eliminar();
         }
@@ -402,6 +405,7 @@ void juegoManual()
             cout << "PUNTOS: " << j.puntos << endl;
             cout << "PASOS: " << pasos<< endl;
             cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
+            listaReportes.InsertarFinalJugador(j);
             jugar = false;
             matriz->eliminar();
         }
@@ -466,14 +470,19 @@ void menutablero() {
             break;
 
         case 0:
-          
+            repetir = false;
             break;
         }
     } while (repetir);
 
 }
 
-void menu() {
+int main()
+{
+   
+    MatrizOrtogonal* matriz;
+    matriz = new MatrizOrtogonal();
+  
     int opcion;
     bool repetir = true;
 
@@ -504,7 +513,7 @@ void menu() {
 
         case 3:
             // Lista de instrucciones de la opción 3                
-
+            listaReportes.RecorrerJugador();
             system("pause>nul"); // Pausa            
             break;
 
@@ -513,29 +522,6 @@ void menu() {
             break;
         }
     } while (repetir);
-}
-
-
-int main()
-{
-    menu();
-    MatrizOrtogonal* matriz;
-    matriz = new MatrizOrtogonal();
-    /* matriz->insertar(0, 0, 1);
-      matriz->insertar(0, 1, 2);
-      matriz->insertar(0, 2, 3);
-      matriz->insertar(1, 0, 4);
-      matriz->insertar(1, 1, 5);
-      matriz->insertar(1, 2, 6);
-      matriz->insertar(2, 0, 7);
-      matriz->insertar(2, 1, 8);
-      matriz->insertar(2, 2, 0);
-
-      std::cout << "Hello World!\n";*/
-    /*Lista listaA = Lista();
-    cout << "LISTA A:" << endl;
-    listaA.InsertarFinal(87);*/
-    
 
    
 

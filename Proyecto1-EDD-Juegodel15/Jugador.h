@@ -11,6 +11,7 @@ class Jugador {
 		string nombre;
 		int puntos;
 		double tiempo;
+		Jugador* siguiente;
 		Jugador();
 		void ingresardatos(string nombre, int puntos, double tiempo);
 		void ingresarPuntos(int p);
