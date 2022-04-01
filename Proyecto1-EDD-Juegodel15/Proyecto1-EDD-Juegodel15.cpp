@@ -10,7 +10,7 @@
 #include <ctime>
 #include <string>
 #include <stdio.h>
-
+using namespace std;
  // paramentros de la matiz en x y
 int columna = 0;
 int fila = 0;;
@@ -25,8 +25,8 @@ int c = 0;
 bool vacio = false;
 bool jugar = true;
 int pasos = 0;
-
 int correcto = 1;
+unsigned t0, t1;
 
 void crearTablero(int x, int y) {
 
@@ -36,6 +36,7 @@ void crearTablero(int x, int y) {
     
 
 }
+
 bool verificador(int n) {
 
     for (int i = 0; i < lista.size(); i++) {
@@ -43,7 +44,7 @@ bool verificador(int n) {
        if (n == lista[i])
        {
            cout << "NO SE PERMITE NUMEROS REPETIDOS" << endl;
-
+         
            return true;
            break;
        }
@@ -51,6 +52,48 @@ bool verificador(int n) {
     return false;
 
 }
+
+void ganar(Jugador j) {
+    cout << "Puntos"<<j.puntos << " " << endl;
+    if (j.puntos == datos+1)
+    {
+        cout << "####################################################################################################" << endl;
+        cout << "####################################################################################################" << endl;
+        cout << "############,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,############" << endl;
+        cout << "############,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,############" << endl;
+        cout << "##iiiiiiiiii,,,,,,,,EEEEE,,,,,EEEEE,,,,,EEEEEE,,,,,EEEEE,,,,,,EEE,EEEEEEEEE,,,EEEEE,,,,,iiiiiiiiii##" << endl;
+        cout << "###iiiiiiiii,,,,,,EEEEEEE,,,,EEEEEEE,,,EEEEEEEi,,,EEEEEEE,,,,EEEE,EEEEEEEEE,iEEEEEE,,,,,iiiiiiiii###" << endl;
+        cout << "####iiiiiiii,,,,,,EEEEEEE,,,EEEEEEEEL,,EEEEEEEE,,EEEEEEEEt,,EEEEE,EEEEEEEEE,EEEEEEE,,,,,iiiiiiii####" << endl;
+        cout << "####;iiiiiii,,,,,EEEEEi;E,,,EEEE,EEEE,,EEEjEEEE,,EEEE,EEEE,,EEEE;,EEEEEEEEE,EEEEEEE,,,,,iiiiiii;####" << endl;
+        cout << "#####iiiiiii,,,,,EEEE,,,,,,,EEEE,EEEE,iEEE,iEEE,,EEEE,EEEE,,EEEE,,,,,EEE,,,,EEEE,,,,,,,,iiiiiii#####" << endl;
+        cout << "######iiiiii,,,,,EEE,,EEEE,,EEEE,EEEE,iEEE,iEEE,,EEEE,EEEE,,EEEE,,,,,EEE,,,,EEEEEEE,,,,,iiiiii######" << endl;
+        cout << "#######iiiii,,,,,EEE,,EEEEE,EEEEEEEEE,iEEE,iEEE,,EEEEEEEEE,,,EEEE,,,,EEE,,,,EEEEEEE,,,,,iiiii#######" << endl;
+        cout << "########iiii,,,,,EEEE,EEEEE,EEEEEEEEE,iEEE,iEEE,,EEEEEEEEE,,,EEEE,,,,EEE,,,,EEEEiii,,,,,iiii########" << endl;
+        cout << "#######iiiii,,,,,EEEEL,,EEE,EEEEEEEEE,iEEE,iEEE,,EEEEEEEEE,,,EEEE,,,,EEE,,,,EEEE,,,,,,,,iiiii#######" << endl;
+        cout << "######;iiiii,,,,,,EEEEEEEEE,EEEE,EEEE,iEEE,iEEE,,EEEE,EEEE,EEEEEE,,,,EEE,,,,EEEEEEE,,,,,iiiii;######" << endl;
+        cout << "#####iiiiiii,,,,,,EEEEEEEE,,EEEE,EEEE,iEEE,iEEE,,EEEE,EEEE,EEEEE,,,,,EEE,,,,tEEEEEE,,,,,iiiiiii#####" << endl;
+        cout << "#####iiiiiii,,,,,,,iEEEEE,,,EEEE,EEEE,iEEE,iEEE,,EEEE,EEEE,EEEEt,,,,,EEE,,,,,;EEEEE,,,,,iiiiiii#####" << endl;
+        cout << "####iiiiiiii,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,iiiiiiii####" << endl;
+        cout << "###iiiiiiiii,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,iiiiiiiii###" << endl;
+        cout << "####################################################################################################" << endl;
+        cout << "####################################################################################################" << endl;
+        cout << "####################################################################################################" << endl;
+        //tiempo
+        t1 = clock();
+        double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+        j.ingresarTiempo(time);
+        cout << "----- END GAME!!!! -----" << endl;
+        cout << "NOMBRE: " << j.nombre << endl;
+        cout << "PUNTOS: " << j.puntos << endl;
+        cout << "PASOS: " << pasos << endl;
+        cout << "TIEMPO: " << j.tiempo <<".seg"<< endl;
+        system("pause");
+        jugar = false;
+    }
+    
+
+}
+
 void aleatorios()
 {
     int aux = 0;
@@ -80,12 +123,13 @@ void aleatorios()
     }
   
 }
+
 void juegoAleatorio()
 {
     MatrizOrtogonal* matriz;
     MatrizOrtogonal* matrizInicial;
     string nombre;
-    int puntos;
+    int puntos=0;
 
     matriz = new MatrizOrtogonal();
     matrizInicial = new MatrizOrtogonal();
@@ -126,6 +170,8 @@ void juegoAleatorio()
 
         }
     }
+    t0 = clock();
+    // Code to execute
     cout << "-----LISTO PARA JUGAR!!!-----" << endl;
     matriz->imprimir();
     //cout << "---------------------------------" << endl;
@@ -140,24 +186,30 @@ void juegoAleatorio()
             cout << "Juego reiniciado" << endl;
             matriz = matrizInicial;
             matriz->imprimir();
+            pasos = 0;
             //aqui se reiniciarian los punto tambien
         }
         else if (n1 == "S" || n1 == "s")
         {
-            cout << "----- GAME END!!!! -----" << endl;
+            t1 = clock();
+            double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+            j.ingresarTiempo(time);
+            cout << "----- END GAME!!!! -----" << endl;
             cout << "NOMBRE: " << j.nombre<<endl;
             cout << "PUNTOS: " << j.puntos << endl;
             cout << "PASOS: " << pasos << endl;
-            cout << "TIEMPO: " << j.tiempo << endl;
+            cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
             jugar = false;
         }
         else {
             int num = stoi(n1);
             matriz->movimiento(num);
             pasos++;
-            j.ingresarPuntos(matriz->puntos(datos + 1));
+           
+            j.ingresarPuntos(matriz->puntosFuncion(datos + 1));
             matriz->imprimir();
             cout << "Pasos: " <<pasos<< endl;
+            ganar(j);
             //j.imprimirdatos();
             
 
@@ -165,16 +217,18 @@ void juegoAleatorio()
 
 
     }
-
+     
 }
+
 void juegoManual()
 {
     MatrizOrtogonal* matriz;
     MatrizOrtogonal* matrizInicial;
     string nombre;
+    int puntos = 0;
     matriz = new MatrizOrtogonal();
     matrizInicial = new MatrizOrtogonal();
-    correcto = 0;
+    
     cout << "Ingrese Nombre del Jugador" << endl;
     cin >> nombre;
     cout << "Ingrese Numero de Filas" << endl;
@@ -183,11 +237,10 @@ void juegoManual()
     cin >> columna;
 
     crearTablero(fila, columna);
-    aleatorios();
     Jugador j = Jugador();
     j.ingresardatos(nombre, 0, 0);
     //limpiar variables
-    correcto = 1;
+    correcto = 0;
     pasos = 0;
     c = 0;
     jugar = true;
@@ -198,7 +251,6 @@ void juegoManual()
         {
             cout << "Ingrese dato en la posicion " << i << " , " << a << endl;
             cin >> inserta;
-
             if (inserta <= datos)
             {
                 if (cont != 0)
@@ -213,6 +265,7 @@ void juegoManual()
                             correcto++;
                             matriz->insertar(i, a, 0, true,correcto);
                             matrizInicial->insertar(i, a, 0, true, correcto);
+                            cout << "Se agrego -> "<<inserta<<" en "<<i<<" , "<<a<< endl;
                             cont++;
                             
                         }
@@ -226,9 +279,11 @@ void juegoManual()
                                 vacio = true;
                                 matriz->insertar(i, a, inserta, true,correcto);
                                 matrizInicial->insertar(i, a, inserta, true, correcto);
+                                cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
                             }
                             else { matriz->insertar(i, a, inserta, false, correcto);
                                  matrizInicial->insertar(i, a, inserta, false, correcto);
+                                 cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
                             
                             }
                         }
@@ -265,9 +320,11 @@ void juegoManual()
 
         }
     }
-    cout << "-----LISTO PARA JUGAR!!!-----" << endl;
+    cout << "-----LISTO PARA JUGAR!!!-----" << endl; 
     matriz->imprimir();
-    //cout << "---------------------------------" << endl;
+    t0 = clock();
+    // Code to execute
+    cout << "---------------------------------" << endl;
     while (jugar == true)
     {
         cout << "Ingrese Numero que desea mover " << endl;    cout << "                                                    PRESIONE R para Reiniciar " << endl;
@@ -277,27 +334,34 @@ void juegoManual()
         if (n1 == "R" || n1 == "r")
         {
             cout << "Juego reiniciado" << endl;
+            pasos = 0;
             matriz = matrizInicial;
             matriz->imprimir();
             //aqui se reiniciarian los punto tambien
         }
         else if (n1 == "S" || n1 == "s")
         {
-            cout << "----- GAME END!!!! -----" << endl;
+            t1 = clock();
+            double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+            j.ingresarTiempo(time);
+            cout << "----- END GAME!!!! -----" << endl;
             cout << "NOMBRE: " << j.nombre << endl;
             cout << "PUNTOS: " << j.puntos << endl;
-            cout << "PASOS: " << pasos;
-            cout << "TIEMPO: " << j.tiempo << endl;
+            cout << "PASOS: " << pasos<< endl;
+            cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
             jugar = false;
         }
         else {
             int num = stoi(n1);
             matriz->movimiento(num);
             pasos++;
-            j.ingresarPuntos(matriz->puntos(datos + 1));
+            cout << "" << endl;
+            j.ingresarPuntos(matriz->puntosFuncion(datos + 1));
             matriz->imprimir();
             cout << "Pasos: " << pasos << endl;
             //j.imprimirdatos();
+            ganar(j);
+            
 
 
         }
@@ -354,6 +418,7 @@ void menutablero() {
     } while (repetir);
 
 }
+
 void menu() {
     int opcion;
     bool repetir = true;
@@ -395,6 +460,7 @@ void menu() {
         }
     } while (repetir);
 }
+
 
 int main()
 {

@@ -88,7 +88,7 @@ typedef struct ListaNodosCol
                 }
                 else
                 {
-                    cout << "| " << temporal->dato << "  |  ";
+                    cout << "| " << temporal->dato << "   |  ";
                 }
                 
                 
@@ -829,7 +829,7 @@ typedef struct MatrizOrtogonal
         LatTemp = l->busqueda(y);
         CabTemp->Columna->insertar(insercion);
         LatTemp->Filas->insertar(insercion);
-        cout << "Se inserto el valor: " << inserta << "<--- en la columna " << x << ", fila " << y << endl;
+        //cout << "Se inserto el valor: " << inserta << "<--- en la columna " << x << ", fila " << y << endl;
     }
 
     void imprimir()
@@ -853,7 +853,7 @@ typedef struct MatrizOrtogonal
        // c->moverNodo(n);
 
     }
-    int puntos(int cc)
+    int puntosFuncion(int cc)
     {
         int puntos=0;
         puntos=c->sumarPunteo(cc);

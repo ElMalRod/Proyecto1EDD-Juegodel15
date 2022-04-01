@@ -12,7 +12,7 @@ Jugador::Jugador()
 	this->tiempo = 0;
 }
 
- void Jugador::ingresardatos(string nombre, int puntos, int tiempo)
+ void Jugador::ingresardatos(string nombre, int puntos, double tiempo)
 {
 	 this->nombre = nombre;
 	 this->puntos = puntos;
@@ -22,6 +22,10 @@ Jugador::Jugador()
 void Jugador::ingresarPuntos(int p)
 {
 	puntos = p;
+}
+void Jugador::ingresarTiempo(double p)
+{
+	tiempo = p;
 }
 
 void Jugador::imprimirdatos() {

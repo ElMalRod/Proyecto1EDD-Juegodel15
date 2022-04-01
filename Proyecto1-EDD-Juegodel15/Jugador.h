@@ -10,10 +10,11 @@ class Jugador {
 	public:
 		string nombre;
 		int puntos;
-		int tiempo;
+		double tiempo;
 		Jugador();
-		void ingresardatos(string nombre, int puntos, int tiempo);
+		void ingresardatos(string nombre, int puntos, double tiempo);
 		void ingresarPuntos(int p);
+		void ingresarTiempo(double p);
 		void imprimirdatos();
 	};
 #endif
