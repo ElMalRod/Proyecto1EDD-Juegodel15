@@ -11,6 +11,7 @@ Lista::Lista(int n)
 {
 	this->frenteJ = NULL;
 	this->finalJ = NULL;
+	this->tamanioJugadores=0;
 }
 string Lista::Recorrer()
 {
@@ -32,8 +33,6 @@ string Lista::Recorrer()
 	}
 	return c;
 }
-
-
 
 bool Lista::EstaVacia()
 {
@@ -60,6 +59,7 @@ bool Lista::EstaVaciaJugador()
 }
 void Lista::RecorrerJugador()
 {
+	OrdenarJugadores();
 	cout << "Reportes" << endl;
 	cout << "Nombre->Puntos->Tiempo" << endl;
 	Jugador* aux;
@@ -71,9 +71,11 @@ void Lista::RecorrerJugador()
 	while (aux != NULL)
 	{
 		cout << aux->nombre << "  " << aux->puntos << "  " << aux->tiempo << " seg" << endl;
+		cout<<"posicion "<<aux->posicion<<endl;
 		aux = aux->siguiente;
 
 	}
+
 }
 void Lista::InsertarVacia(int valor)
 {
@@ -86,12 +88,13 @@ void Lista::InsertarVacia(int valor)
 
 }
 
-void Lista::InsertarVaciaJugador(Jugador j)
+void Lista::InsertarVaciaJugador(Jugador j, int pos)
 {
-	Jugador* nuevo = new Jugador();
+	Jugador* nuevo = new Jugador(pos);
 	nuevo->nombre = j.nombre;
 	nuevo->puntos = j.puntos;
 	nuevo->tiempo = j.tiempo;
+	nuevo->posicion = j.posicion;
 	nuevo->siguiente = this->frenteJ;
 	this->frenteJ = nuevo;
 	this->finalJ = nuevo;
@@ -117,22 +120,25 @@ void Lista::InsertarFinal(int valor)
 	}
 }
 
-void Lista::InsertarFinalJugador(Jugador j)
+void Lista::InsertarFinalJugador(Jugador j, int pos)
 {
 	if (EstaVaciaJugador() == true)
 	{
-		InsertarVaciaJugador(j);
+		InsertarVaciaJugador(j,pos);
+		this->tamanioJugadores++;
 	}
 	else
 	{
-		Jugador* nuevo = new Jugador();
+		Jugador* nuevo = new Jugador(pos);
 		nuevo->nombre = j.nombre;
 		nuevo->puntos = j.puntos;
 		nuevo->tiempo = j.tiempo;
+		nuevo->posicion = j.posicion;
 		Jugador* aux;
 		aux = this->finalJ;
 		aux->siguiente = nuevo;
 		this->finalJ = nuevo;
+		this->tamanioJugadores++;
 
 	}
 }
@@ -158,6 +164,90 @@ int Lista::ObtenerXpos(int pos)
 		}
 	}
 
+}
+void Lista::OrdenarJugadores()
+{
+	int temp;
+	double tiempo1;
+	string nombre1;
+	for (Jugador* i = frenteJ; i->siguiente != NULL; i = i->siguiente) {
+		for (Jugador* j = i->siguiente; j != NULL; j = j->siguiente) {
+			if (i->puntos < j->puntos) { // "< de Mayor a menor" y "> de menor a mayor"
+				temp = i->puntos;
+				tiempo1 = i->tiempo;
+				nombre1 = i->nombre;
+
+				i->puntos = j->puntos;
+				i->tiempo = j->tiempo;
+				i->nombre = j->nombre;
+
+				j->puntos = temp;
+				j->tiempo = tiempo1;
+				j->nombre = nombre1;
+
+
+
+			}
+		}
+	}
+
+	// Imprime el Orden de los jugadores
+	int i = 1;
+	Jugador* aux = frenteJ;
+	printf("\n    Reportes: ");
+	cout << "NOMBRE->" << "PUNTOS->" << "TIEMPO->" << endl;
+	while (aux != NULL) {
+		
+		cout << i << ". " << aux->nombre << " " << aux->puntos << " " << aux->tiempo << "seg " << endl;
+		aux = aux->siguiente;
+		i++;
+	}
+	if (i == 0)
+		printf("\n\t La lista esta vacia...");
+	
+}
+
+int Lista::DevolverPosicion(string nombre)
+{
+	int temp;
+	double tiempo1;
+	string nombre1;
+	for (Jugador* i = frenteJ; i->siguiente != NULL; i = i->siguiente) {
+		for (Jugador* j = i->siguiente; j != NULL; j = j->siguiente) {
+			if (i->puntos < j->puntos) { // "< de Mayor a menor" y "> de menor a mayor"
+				temp = i->puntos;
+				tiempo1 = i->tiempo;
+				nombre1 = i->nombre;
+
+				i->puntos = j->puntos;
+				i->tiempo = j->tiempo;
+				i->nombre = j->nombre;
+
+				j->puntos = temp;
+				j->tiempo = tiempo1;
+				j->nombre = nombre1;
+
+
+
+			}
+		}
+	}
+
+	// Imprime el Orden de los jugadores
+	int i = 1;
+	Jugador* aux = frenteJ;
+	printf("\n    Reportes: ");
+	while (aux != NULL) {
+		if (aux->nombre == nombre)
+		{
+			return i;
+		}
+		aux = aux->siguiente;
+		i++;
+	}
+	if (i == 0)
+		printf("\n\t La lista esta vacia...");
+	return i;
 }
 void Lista::limpiar()
 {

@@ -10,6 +10,7 @@
 #include <ctime>
 #include <string>
 #include <stdio.h>
+
 using namespace std;
  // paramentros de la matiz en x y
 int columna = 0;
@@ -28,6 +29,7 @@ bool vacio = false;
 bool jugar = true;
 int pasos = 0;
 int correcto = 1;
+int contJugadores = -1;
 unsigned t0, t1;
 
 void crearTablero(int x, int y) {
@@ -84,12 +86,13 @@ void ganar(Jugador j) {
         t1 = clock();
         double time = (double(t1 - t0) / CLOCKS_PER_SEC);
         j.ingresarTiempo(time);
+        listaReportes.InsertarFinalJugador(j, contJugadores);
         cout << "----- END GAME!!!! -----" << endl;
         cout << "NOMBRE: " << j.nombre << endl;
         cout << "PUNTOS: " << j.puntos << endl;
         cout << "PASOS: " << pasos << endl;
         cout << "TIEMPO: " << j.tiempo <<".seg"<< endl;
-        listaReportes.InsertarFinalJugador(j);
+        cout << "POSICION EN LA TABLA: " << listaReportes.DevolverPosicion(j.nombre) << endl;
         system("pause");
         jugar = false;
     }
@@ -148,7 +151,8 @@ void juegoAleatorio()
     listaAle.limpiar();
     listaInicial.limpiar();
     aleatorios();
-    Jugador j=  Jugador();
+    Jugador j=  Jugador(contJugadores);
+    contJugadores++;
     j.ingresardatos(nombre, 0, 0);
     //limpiar variables
     correcto = 1;
@@ -222,12 +226,13 @@ void juegoAleatorio()
             t1 = clock();
             double time = (double(t1 - t0) / CLOCKS_PER_SEC);
             j.ingresarTiempo(time);
+            listaReportes.InsertarFinalJugador(j, contJugadores);
             cout << "----- END GAME!!!! -----" << endl;
             cout << "NOMBRE: " << j.nombre<<endl;
             cout << "PUNTOS: " << j.puntos << endl;
             cout << "PASOS: " << pasos << endl;
             cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
-            listaReportes.InsertarFinalJugador(j);
+            cout << "POSICION EN LA TABLA: " << listaReportes.DevolverPosicion(nombre) << endl;
             jugar = false;
             matriz->eliminar();
         }
@@ -266,7 +271,8 @@ void juegoManual()
     cin >> columna;
 
     crearTablero(fila, columna);
-    Jugador j = Jugador();
+    contJugadores++;
+    Jugador j = Jugador(contJugadores);
     j.ingresardatos(nombre, 0, 0);
     //limpiar variables
     correcto = 0;
@@ -361,6 +367,7 @@ void juegoManual()
     {
         cout << "Ingrese Numero que desea mover " << endl;    cout << "                                                    PRESIONE R para Reiniciar " << endl;
         cout << "                                                    PRESIONE S para Terminar " << endl;
+        cout << "                                                    PRESIONE A para Autocompletar " << endl;
         cin >> n1;
 
         if (n1 == "R" || n1 == "r")
@@ -400,12 +407,14 @@ void juegoManual()
             t1 = clock();
             double time = (double(t1 - t0) / CLOCKS_PER_SEC);
             j.ingresarTiempo(time);
+            listaReportes.InsertarFinalJugador(j, contJugadores);
             cout << "----- END GAME!!!! -----" << endl;
             cout << "NOMBRE: " << j.nombre << endl;
             cout << "PUNTOS: " << j.puntos << endl;
             cout << "PASOS: " << pasos<< endl;
             cout << "TIEMPO: " << j.tiempo << ".seg"<<endl;
-            listaReportes.InsertarFinalJugador(j);
+            cout << "POSICION EN LA TABLA: " << listaReportes.DevolverPosicion(nombre) << endl;
+            
             jugar = false;
             matriz->eliminar();
         }
@@ -512,8 +521,9 @@ int main()
             break;
 
         case 3:
-            // Lista de instrucciones de la opción 3                
-            listaReportes.RecorrerJugador();
+            // Lista de instrucciones de la opción 3  
+            listaReportes.OrdenarJugadores();
+            //listaReportes.RecorrerJugador();
             system("pause>nul"); // Pausa            
             break;
 
