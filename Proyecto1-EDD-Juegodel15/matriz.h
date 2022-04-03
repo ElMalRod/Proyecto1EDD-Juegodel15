@@ -5,9 +5,8 @@
 
 
 using namespace std;
-int xx;
-int yy;
-bool aceptar;
+ //int xx;
+ //int yy;
 ///// NODO DEL CENTRO
 
 /* Esta esctructura es la que inicializa cada nodo nuevo*/ 
@@ -42,7 +41,6 @@ typedef struct ListaNodosCol
 {
     NodoCen* primero;
     NodoCen* ultimo;
-
     //Constructor
     ListaNodosCol()
     {
@@ -99,6 +97,7 @@ typedef struct ListaNodosCol
     //buscar nodo a mover pivote a numero
     bool moverPivote(int n)
     {
+
         if (!vacio())
         {
             NodoCen* temporal = primero;
@@ -106,10 +105,7 @@ typedef struct ListaNodosCol
             {
                 if (temporal->pivote==true)
                 {
-                    //moverNodo(n);
-                    xx = temporal->x;
-                    yy = temporal->y;
-
+                    
                     temporal->pivote = false;
                     temporal->dato = n;
 
@@ -122,7 +118,66 @@ typedef struct ListaNodosCol
         return false;
 
     }
-    bool moverNodo(int n) //numero a pivote
+    bool ExistePivote()
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->pivote == true)
+                {
+                    
+                    return true;
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return false;
+    }
+
+    int RegresarPosicionPivoteX()
+    {
+
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->pivote == true)
+                {
+                    int xx = temporal->x;
+                    return xx;
+
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return 0;
+    }
+
+    int RegresarPosicionPivoteY()
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->pivote == true)
+                {
+                    int yy = temporal->y;
+                    return yy;
+
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return 0;
+    }
+    bool moverNodo(int n, int xx, int yy) //numero a pivote
     {
         if (!vacio())
         {
@@ -218,12 +273,12 @@ typedef struct ListaNodosCol
             {
                 if (temporal->dato == temporal->posxy)
                 {
-                    puntos = puntos + 1;
+                    puntos = puntos + 2;
 
                 }
                 if (temporal->dato==0 && temporal->posxy==c)
                 {
-                    puntos = puntos + 1;
+                    puntos = puntos + 2;
                 }
 
                 temporal = temporal->abajo;
@@ -589,14 +644,62 @@ typedef struct Cabeceras
             }
         }
     }
-    void moverNodo(int n)
+    int RegresarPosicionX()
     {
         if (!vacio())
         {
             NodoCab* temporal = primero;
             while (temporal != NULL)
             {
-                if (temporal->Columna->moverNodo(n) != true)
+                if (temporal->Columna->ExistePivote() != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                else {
+                    //aqui esta el vipote entoces 
+                    int xx = temporal->Columna->RegresarPosicionPivoteX();
+                    return xx;
+
+                }
+
+            }
+        }
+        return 0;
+    }
+
+    int RegresarPosicionY()
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->ExistePivote() != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                else {
+                    //aqui esta el vipote entoces 
+                    int yy = temporal->Columna->RegresarPosicionPivoteY();
+                    return yy;
+
+                }
+
+            }
+        }
+        return 0;
+    }
+
+    void moverNodo(int n, int xx, int yy)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->moverNodo(n,xx,yy) != true)
                 {
                     temporal = temporal->siguiente;
 
@@ -808,9 +911,11 @@ typedef struct MatrizOrtogonal
     
     Cabeceras* c;
     Laterales* l;
+    MatrizOrtogonal* siguiente;
 
     MatrizOrtogonal()
     {
+
         c = new Cabeceras();
         l = new Laterales();
     }
@@ -845,8 +950,12 @@ typedef struct MatrizOrtogonal
     {
        if (c->verificador(n) == true)
         {
-            c->moverPivote(n);
-            c->moverNodo(n);
+           //primero guardar las posicion del pivote
+           int xx = c->RegresarPosicionX();
+           int yy = c->RegresarPosicionY();
+           //
+           c->moverPivote(n);
+           c->moverNodo(n, xx, yy);
         }
         else
         {

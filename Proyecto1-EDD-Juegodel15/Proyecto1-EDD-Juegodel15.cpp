@@ -6,11 +6,12 @@
 #include "matriz.h"
 #include "Jugador.h"
 #include "Lista.h"
+#include "ListaMatriz.h"
 #include <cstdlib>
 #include <ctime>
 #include <string>
 #include <stdio.h>
-
+#include <fstream>
 using namespace std;
  // paramentros de la matiz en x y
 int columna = 0;
@@ -32,11 +33,41 @@ int correcto = 1;
 int contJugadores = -1;
 unsigned t0, t1;
 
-void crearTablero(int x, int y) {
+void archivo() {
+    char cadena[128];
+    int i;
+    ifstream fe("C:/Users/emili/OneDrive/Escritorio/PROYECTOS/Archivo.txt");
+    while (!fe.eof()) {
+        fe >> cadena;
+        fe  >> i;
+        cout << cadena <<i<< endl;
 
+    }
+    fe.close();
+   // ifstream Archivo;
+    //string nombre;
+    //Archivo.open("C:\Users\emili\OneDrive\Escritorio\PROYECTOS\Archivo.txt", ios::in); // abrimos en modo lectura
+
+    /*/if (Archivo.fail())
+    {
+        cout<<"No se puso leer el archivo" << endl;
+        exit(1);
+    }
+
+    while (!Archivo.eof()) // mientras no sea final del archivo
+    {
+        getline(Archivo, nombre);
+
+        cout << "El Nombre es "<<nombre<<endl;
+
+    }*/
+}
+void crearTablero(int x, int y, int n) {
+
+    //n indica si hay mas niveles
     fila = x;
     columna = y;
-    datos = (x * y) - 1;
+    datos = ((x * y)*n) - 1;
     
 
 }
@@ -58,8 +89,9 @@ bool verificador(int n) {
 }
 
 void ganar(Jugador j) {
+    int pt = (datos + 1) *2;
     cout << "Puntos"<<j.puntos << " " << endl;
-    if (j.puntos == datos+1)
+    if (j.puntos == pt)
     {
         cout << "####################################################################################################" << endl;
         cout << "####################################################################################################" << endl;
@@ -131,6 +163,125 @@ void aleatorios()
   
 }
 
+void JuegoNiveles()
+{
+    MatrizOrtogonal* matriz; //crea el puntero a la matriz ortogonal
+    string nombre; //variable para guardar nombre del jugador
+    int puntos, niveles = 0; //variable para guardar puntos y numero de niveles de partida
+    matriz = new MatrizOrtogonal(); //inicializacion de la matriz
+
+
+    //pedir datos
+    cout << "Ingrese Nombre del Jugador" << endl;
+    cin >> nombre;
+    cout << "Ingrese Numero de niveles" << endl;
+    cin >> niveles;
+    cout << "Ingrese Numero de Filas" << endl;
+    cin >> fila;
+    cout << "Ingrese Numero de Columnas" << endl;
+    cin >> columna;
+
+    //
+    crearTablero(fila, columna, niveles); //guardar datos de tablero
+    contJugadores++;// aumentar contador de jugadores
+    Jugador j = Jugador(contJugadores); //creador de jugador
+    j.ingresardatos(nombre, 0, 0);//Guardar datos de jugador
+    
+
+    //limpiar variables
+    correcto = 0;
+    pasos = 0;
+    c = 0;
+    jugar = true;
+    listaManual.limpiar();
+    listaInicial.limpiar();
+    cout << "RECUERDE MARCAR UN ESPACIO VACIO CON 0" << endl;
+
+    //Guardar datos de los niveles
+    for (int i = 0; i < niveles; i++)
+    {
+        //for para ingresar datos
+        for (int i = 0; i < fila; i++)
+        {
+            for (int a = 0; a < columna; a++)
+            {
+                cout << "Ingrese dato en la posicion " << i << " , " << a << endl;
+                cin >> inserta;
+                if (inserta <= datos)
+                {
+                    if (cont != 0)
+                    {
+
+                        if (verificador(inserta) == false)
+                        {
+                            if (vacio == false && cont == datos)
+                            {
+
+                                cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
+                                correcto++;
+                                matriz->insertar(i, a, 0, true, correcto);
+                                listaInicial.InsertarFinal(0);
+                                cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
+                                cont++;
+
+                            }
+                            else {
+                                listaManual.InsertarFinal(inserta);
+
+                                cont++;
+                                correcto++;
+                                if (inserta == 0)
+                                {
+                                    vacio = true;
+                                    matriz->insertar(i, a, inserta, true, correcto);
+                                    listaInicial.InsertarFinal(inserta);
+                                    cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
+                                }
+                                else {
+                                    matriz->insertar(i, a, inserta, false, correcto);
+                                    listaInicial.InsertarFinal(inserta);
+                                    cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
+
+                                }
+                            }
+
+
+                        }
+                        else
+                        {
+                            a--;
+                        }
+
+                    }
+                    else {
+
+                        listaManual.InsertarFinal(inserta);
+                        cont++;
+                        correcto++;
+                        if (inserta == 0)
+                        {
+                            vacio = true;
+                            matriz->insertar(i, a, inserta, true, correcto);
+                            listaInicial.InsertarFinal(inserta);
+                        }
+                        else {
+                            matriz->insertar(i, a, inserta, false, correcto);
+                            listaInicial.InsertarFinal(inserta);
+                        }
+                    }
+                }
+                else
+                {
+                    cout << "UNICAMENTE PUEDE INGRESAR DATOS MENORES A " << datos << endl;
+                    a--;
+                }
+
+            }
+        }
+    }
+
+
+}
 void juegoAleatorio()
 {
     MatrizOrtogonal* matriz;
@@ -147,7 +298,7 @@ void juegoAleatorio()
     cout << "Ingrese Numero de Columnas" << endl;
     cin >> columna;
 
-    crearTablero(fila, columna);
+    crearTablero(fila, columna,1);
     listaAle.limpiar();
     listaInicial.limpiar();
     aleatorios();
@@ -258,7 +409,6 @@ void juegoAleatorio()
 void juegoManual()
 {
     MatrizOrtogonal* matriz;
-    MatrizOrtogonal* matrizInicial;
     string nombre;
     int puntos = 0;
     matriz = new MatrizOrtogonal();
@@ -270,7 +420,7 @@ void juegoManual()
     cout << "Ingrese Numero de Columnas" << endl;
     cin >> columna;
 
-    crearTablero(fila, columna);
+    crearTablero(fila, columna,1);
     contJugadores++;
     Jugador j = Jugador(contJugadores);
     j.ingresardatos(nombre, 0, 0);
@@ -488,7 +638,7 @@ void menutablero() {
 
 int main()
 {
-   
+   // archivo();
     MatrizOrtogonal* matriz;
     matriz = new MatrizOrtogonal();
   
@@ -534,8 +684,8 @@ int main()
     } while (repetir);
 
    
-
    
+  
 
     return 0;
 }
