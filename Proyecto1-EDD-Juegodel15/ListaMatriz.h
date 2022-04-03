@@ -11,13 +11,24 @@ public:
 	MatrizOrtogonal* frente;
 	MatrizOrtogonal* final;
 	int niveles;
-	ListaMatriz(int n);
+	int xxP, yyP = 0; //posiciones de pivote
+	int xxD, yyD = 0; //posiciones de dato
+	ListaMatriz();
 	bool EstaVacia();
 	void InsertarVacia(MatrizOrtogonal* matriz);
 	void InsertarFinal(MatrizOrtogonal* matriz);
 	MatrizOrtogonal* ObtenerXpos(int pos);
 	void Recorrer();
-
+	void ImprimirTablero();
+	void movimientos(int n);
+	void movimientosNiveles(int n);
+	bool guardarPiv();
+	bool guardarDato(int n);
+	void moverPivote(int n);
+	void moverDatos(int n);
+	bool cambiarBadera(int n);
+	bool verificarMovimientosNormales(int n);
+	
 
 };
 #endif LISTAMATRIZ

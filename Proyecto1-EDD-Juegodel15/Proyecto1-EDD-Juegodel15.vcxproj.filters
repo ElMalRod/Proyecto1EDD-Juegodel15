@@ -27,6 +27,9 @@
     <ClCompile Include="Lista.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="ListaMatriz.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matriz.h">
@@ -41,5 +44,13 @@
     <ClInclude Include="Nodo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="ListaMatriz.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\Archivo.txt">
+      <Filter>Archivos de origen</Filter>
+    </Text>
   </ItemGroup>
 </Project>

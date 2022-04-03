@@ -15,6 +15,7 @@ typedef struct NodoCen
     int dato;
     int x, y;
     bool pivote;
+    bool cambiante;
     int posxy;
     // PUNTEROS
     NodoCen* arriba;
@@ -28,6 +29,7 @@ typedef struct NodoCen
         this->y = y;
         this->pivote = pivote;
         this->posxy = posxy;
+        this->cambiante = false;
         arriba = NULL;
         abajo = NULL;
         izquierda = NULL;
@@ -137,6 +139,44 @@ typedef struct ListaNodosCol
         return false;
     }
 
+    bool ExisteDato(int n)
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato == n)
+                {
+                    
+                    return true;
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return false;
+    }
+
+    //cambiar bandera a cambiante
+    bool CambiarBandera (int n)
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato == n)
+                {
+                    temporal->cambiante = true;
+                    return true;
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return false;
+    }
     int RegresarPosicionPivoteX()
     {
 
@@ -177,6 +217,46 @@ typedef struct ListaNodosCol
         }
         return 0;
     }
+    int RegresarPosicionDatoX(int n)
+    {
+
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato == n)
+                {
+                    int xx = temporal->x;
+                    return xx;
+
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return 0;
+    }
+    int RegresarPosicionDatoY(int n)
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato == n)
+                {
+                    int yy = temporal->y;
+                    return yy;
+
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return 0;
+    }
+
     bool moverNodo(int n, int xx, int yy) //numero a pivote
     {
         if (!vacio())
@@ -192,6 +272,31 @@ typedef struct ListaNodosCol
 
                         temporal->pivote = true;
                         temporal->dato = 0;
+                        return true;
+                    }
+                }
+
+                temporal = temporal->abajo;
+            }
+        }
+        return false;
+    }
+    bool moverNodoNiveles(int n)
+    {
+        if (!vacio())
+        {
+            NodoCen* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->dato == n)
+                {
+
+                    if (temporal->cambiante==true)
+                    {
+
+                        temporal->pivote = true;
+                        temporal->dato = 0;
+                        temporal->cambiante = false;
                         return true;
                     }
                 }
@@ -576,7 +681,7 @@ typedef struct Cabeceras
             }
         }
         else {
-            cout<<"esta vacia" << endl;
+            //cout<<"esta vacia" << endl;
         }
     }
 
@@ -657,7 +762,7 @@ typedef struct Cabeceras
 
                 }
                 else {
-                    //aqui esta el vipote entoces 
+                    //aqui esta el pivote entoces 
                     int xx = temporal->Columna->RegresarPosicionPivoteX();
                     return xx;
 
@@ -681,7 +786,7 @@ typedef struct Cabeceras
 
                 }
                 else {
-                    //aqui esta el vipote entoces 
+                    //aqui esta el pivote entoces 
                     int yy = temporal->Columna->RegresarPosicionPivoteY();
                     return yy;
 
@@ -691,7 +796,126 @@ typedef struct Cabeceras
         }
         return 0;
     }
+    int RegresarPosicionXdato(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->ExisteDato(n) != true)
+                {
+                    temporal = temporal->siguiente;
 
+                }
+                else {
+                    //aqui esta el pivote entoces 
+                    int xx = temporal->Columna->RegresarPosicionDatoX(n);
+                    return xx;
+
+                }
+
+            }
+        }
+        return 0;
+    }
+
+    int RegresarPosicionYdato(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->ExisteDato(n) != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                else {
+                    //aqui esta el pivote entoces 
+                    int yy = temporal->Columna->RegresarPosicionDatoY(n);
+                    return yy;
+
+                }
+
+            }
+        }
+        return 0;
+    }
+    //COMPROBAR QUE ESXIXTE PIVOTE --funcion para varios niveles
+    bool ExistePivote()
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->ExistePivote() != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                else {
+                    //aqui esta el pivote entoces 
+
+                    return true;
+
+                }
+
+            }
+        }
+        return false;
+
+    }
+    bool ExisteNodoDato(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->ExisteDato(n) != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                else {
+                    //aqui esta el numero entoces 
+
+                    return true;
+
+                }
+
+            }
+        }
+        return false;
+    }
+    //cambiar bandera de dato
+    bool CambiarBanderaDato(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->CambiarBandera(n)!=true)
+                {
+                    temporal = temporal->siguiente;
+                    
+                }
+                else {
+                    //aqui esta el numero entoces 
+
+                    return true;
+
+                }
+
+            }
+        }
+        return false;
+    }
+    //Esta funcion es para encontrar el numero que se 
     void moverNodo(int n, int xx, int yy)
     {
         if (!vacio())
@@ -709,6 +933,26 @@ typedef struct Cabeceras
         }
     }
     //
+    bool MoverNodoNiveles(int n)
+    {
+        if (!vacio())
+        {
+            NodoCab* temporal = primero;
+            while (temporal != NULL)
+            {
+                if (temporal->Columna->moverNodoNiveles(n) != true)
+                {
+                    temporal = temporal->siguiente;
+
+                }
+                else {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
     bool verificador(int n)
     {
         if (!vacio())
@@ -726,6 +970,7 @@ typedef struct Cabeceras
         }
         return false;
     }
+    
     //encontrar punteo
     int sumarPunteo(int cc)
     {
@@ -912,12 +1157,17 @@ typedef struct MatrizOrtogonal
     Cabeceras* c;
     Laterales* l;
     MatrizOrtogonal* siguiente;
+    //variables globales jaja
+    int xx = 0;
+    int yy = 0;
 
     MatrizOrtogonal()
     {
 
         c = new Cabeceras();
         l = new Laterales();
+        this->siguiente = NULL;
+        
     }
     void insertar(int x, int y, int inserta, bool pivote, int posxy)
     {
@@ -946,6 +1196,7 @@ typedef struct MatrizOrtogonal
         c->imprimir();
         
     }
+
     void movimiento(int n)
     {
        if (c->verificador(n) == true)
@@ -964,6 +1215,76 @@ typedef struct MatrizOrtogonal
         //c->moverPivote(n);
        // c->moverNodo(n);
 
+    }
+    bool  movimientoNiveles(int n)
+    {
+        
+        if (c->verificador(n) == true)
+        {
+            //primero guardar las posicion del pivote
+            int xx = c->RegresarPosicionX();
+            int yy = c->RegresarPosicionY();
+            c->moverPivote(n);
+            c->moverNodo(n, xx, yy);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+    bool moverPivoteNiveles(int n)
+    {
+        if (verificarPivoteDatos() == true)
+        {
+            c->moverPivote(n);
+            return true;
+
+        }
+        else { return false; }
+    }
+    bool moverNodoDatos(int n)
+    {
+        if (c->MoverNodoNiveles(n)==true)
+        {
+            return true;
+        }
+        else { return false; }
+    }
+    bool cambiarBanderaDatos(int n)
+    {
+        //
+        if (c->CambiarBanderaDato(n)==true)
+        {
+            return true;
+        }
+        else { return false; }
+        
+    }
+    bool verificarNodoDatos(int n)
+    {
+        if (c->ExisteNodoDato(n)==true)
+        {
+            xx = c->RegresarPosicionXdato(n);
+            yy = c->RegresarPosicionYdato(n);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    bool verificarPivoteDatos()
+    {
+        if (c->ExistePivote()==true)
+        {
+            xx = c->RegresarPosicionX();
+            yy = c->RegresarPosicionY();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     int puntosFuncion(int cc)
     {

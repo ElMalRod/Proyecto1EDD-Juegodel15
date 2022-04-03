@@ -24,6 +24,8 @@ Lista listaManual= Lista(); // Lista donde se guardan los numero de manual para 
 Lista listaAle = Lista();// Lista donde se guardan los numeros aleatoreos
 Lista listaInicial = Lista();// Lista donde se guardan los numeros de la matriz inicial para poder reinciar.
 Lista listaReportes = Lista(0);
+ListaMatriz matrices = ListaMatriz();
+
 int cont = 0;
 int c = 0;
 bool vacio = false;
@@ -71,7 +73,6 @@ void crearTablero(int x, int y, int n) {
     
 
 }
-
 bool verificador(int n) {
 
     for (int i = 0; i < listaManual.tamanio; i++) {
@@ -87,7 +88,6 @@ bool verificador(int n) {
     return false;
 
 }
-
 void ganar(Jugador j) {
     int pt = (datos + 1) *2;
     cout << "Puntos"<<j.puntos << " " << endl;
@@ -132,6 +132,7 @@ void ganar(Jugador j) {
 
 }
 
+
 void aleatorios()
 {
     
@@ -162,14 +163,99 @@ void aleatorios()
     }
   
 }
+void guardarNivel()
+{
+    MatrizOrtogonal* matriz; //crea el puntero a la matriz ortogonal
+    matriz = new MatrizOrtogonal(); //inicializacion de la matriz
 
-void JuegoNiveles()
+    //for
+    for (int i = 0; i < fila; i++)
+    {
+        for (int a = 0; a < columna; a++)
+        {
+            cout << "Ingrese dato en la posicion " << i << " , " << a << endl;
+            cin >> inserta;
+            if (inserta <= datos)
+            {
+                if (cont != 0)
+                {
+
+                    if (verificador(inserta) == false)
+                    {
+                        if (vacio == false && cont == datos)
+                        {
+
+                            cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
+                            correcto++;
+                            matriz->insertar(i, a, 0, true, correcto);
+                            listaInicial.InsertarFinal(0);
+                            cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
+                            cont++;
+
+                        }
+                        else {
+                            listaManual.InsertarFinal(inserta);
+
+                            cont++;
+                            correcto++;
+                            if (inserta == 0)
+                            {
+                                vacio = true;
+                                matriz->insertar(i, a, inserta, true, correcto);
+                                listaInicial.InsertarFinal(inserta);
+                                cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
+                            }
+                            else {
+                                matriz->insertar(i, a, inserta, false, correcto);
+                                listaInicial.InsertarFinal(inserta);
+                                cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
+
+                            }
+                        }
+
+
+                    }
+                    else
+                    {
+                        a--;
+                    }
+
+                }
+                else {
+
+                    listaManual.InsertarFinal(inserta);
+                    cont++;
+                    correcto++;
+                    if (inserta == 0)
+                    {
+                        vacio = true;
+                        matriz->insertar(i, a, inserta, true, correcto);
+                        listaInicial.InsertarFinal(inserta);
+                    }
+                    else {
+                        matriz->insertar(i, a, inserta, false, correcto);
+                        listaInicial.InsertarFinal(inserta);
+                    }
+                }
+            }
+            else
+            {
+                cout << "UNICAMENTE PUEDE INGRESAR DATOS MENORES A " << datos << endl;
+                a--;
+            }
+
+        }
+    }
+    //
+    matrices.InsertarFinal(matriz);
+
+}
+void juegoNiveles()
 {
     MatrizOrtogonal* matriz; //crea el puntero a la matriz ortogonal
     string nombre; //variable para guardar nombre del jugador
     int puntos, niveles = 0; //variable para guardar puntos y numero de niveles de partida
     matriz = new MatrizOrtogonal(); //inicializacion de la matriz
-
 
     //pedir datos
     cout << "Ingrese Nombre del Jugador" << endl;
@@ -200,86 +286,63 @@ void JuegoNiveles()
     //Guardar datos de los niveles
     for (int i = 0; i < niveles; i++)
     {
-        //for para ingresar datos
-        for (int i = 0; i < fila; i++)
+        if (i>0)
         {
-            for (int a = 0; a < columna; a++)
-            {
-                cout << "Ingrese dato en la posicion " << i << " , " << a << endl;
-                cin >> inserta;
-                if (inserta <= datos)
-                {
-                    if (cont != 0)
-                    {
-
-                        if (verificador(inserta) == false)
-                        {
-                            if (vacio == false && cont == datos)
-                            {
-
-                                cout << "NO AGREGO ESPACIO VACIOOOO se agregara automaticamente" << endl;
-                                correcto++;
-                                matriz->insertar(i, a, 0, true, correcto);
-                                listaInicial.InsertarFinal(0);
-                                cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
-                                cont++;
-
-                            }
-                            else {
-                                listaManual.InsertarFinal(inserta);
-
-                                cont++;
-                                correcto++;
-                                if (inserta == 0)
-                                {
-                                    vacio = true;
-                                    matriz->insertar(i, a, inserta, true, correcto);
-                                    listaInicial.InsertarFinal(inserta);
-                                    cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
-                                }
-                                else {
-                                    matriz->insertar(i, a, inserta, false, correcto);
-                                    listaInicial.InsertarFinal(inserta);
-                                    cout << "Se agrego -> " << inserta << " en " << i << " , " << a << endl;
-
-                                }
-                            }
-
-
-                        }
-                        else
-                        {
-                            a--;
-                        }
-
-                    }
-                    else {
-
-                        listaManual.InsertarFinal(inserta);
-                        cont++;
-                        correcto++;
-                        if (inserta == 0)
-                        {
-                            vacio = true;
-                            matriz->insertar(i, a, inserta, true, correcto);
-                            listaInicial.InsertarFinal(inserta);
-                        }
-                        else {
-                            matriz->insertar(i, a, inserta, false, correcto);
-                            listaInicial.InsertarFinal(inserta);
-                        }
-                    }
-                }
-                else
-                {
-                    cout << "UNICAMENTE PUEDE INGRESAR DATOS MENORES A " << datos << endl;
-                    a--;
-                }
-
-            }
+            //matrices.InsertarFinal(matriz); // agregar matriz recien llenada a lista de matrices
+            matriz->eliminar();// eliminar matriz
+            matriz = new MatrizOrtogonal();//inicializarla*/
         }
+        //for para ingresar datos
+        guardarNivel();
+        matrices.InsertarFinal(matriz);
+       
+        cout << "Matriz "<<i<<" ingresada." << endl;
     }
+    // imprimir matrices
+    matrices.ImprimirTablero();
+    while (jugar == true)
+    {
+        cout << "Ingrese Numero que desea mover " << endl;    cout << "                                                    PRESIONE R para Reiniciar " << endl;
+        cout << "                                                    PRESIONE S para Terminar " << endl;
+        cout << "                                                    PRESIONE A para Autocompletar " << endl;
+        cin >> n1;
 
+        if (n1 == "R" || n1 == "r")
+        {
+            
+            cout << "pendiente" << endl;
+           
+        }
+        else if (n1 == "S" || n1 == "s")
+        {
+            t1 = clock();
+            double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+            j.ingresarTiempo(time);
+            listaReportes.InsertarFinalJugador(j, contJugadores);
+            cout << "----- END GAME!!!! -----" << endl;
+            cout << "NOMBRE: " << j.nombre << endl;
+            cout << "PUNTOS: " << j.puntos << endl;
+            cout << "PASOS: " << pasos << endl;
+            cout << "TIEMPO: " << j.tiempo << ".seg" << endl;
+            cout << "POSICION EN LA TABLA: " << listaReportes.DevolverPosicion(nombre) << endl;
+
+            jugar = false;
+            //matriz->eliminar();
+        }
+        else {
+            int num = stoi(n1);
+            //matriz->movimiento(num);
+            matrices.movimientos(num);
+            matrices.ImprimirTablero();
+            pasos++;
+           
+
+
+
+        }
+
+
+    }
 
 }
 void juegoAleatorio()
@@ -405,7 +468,6 @@ void juegoAleatorio()
     }
      
 }
-
 void juegoManual()
 {
     MatrizOrtogonal* matriz;
@@ -601,8 +663,9 @@ void menutablero() {
         // Texto del menú que se verá cada vez
         cout << "\n\nMenu de Tablero" << endl;
         cout << "1. Manual" << endl;
-        cout << "2. Cargar Archivo" << endl;
-        cout << "3. Aleatorio" << endl;
+        cout << "2. Manual con Niveles" << endl;
+        cout << "3. Cargar Archivo" << endl;
+        cout << "4. Aleatorio" << endl;
         cout << "0. Regresar" << endl;
 
         cout << "\nIngrese una opcion: " << endl;
@@ -611,6 +674,7 @@ void menutablero() {
         switch (opcion) {
         case 1:
             // Lista de instrucciones de la opción 1   
+          
             juegoManual();
             system("pause");
             break;
@@ -618,13 +682,19 @@ void menutablero() {
         case 2:
             // Lista de instrucciones de la opción 2                
             
-       
+            juegoNiveles();
             break;
 
         case 3:
             // Lista de instrucciones de la opción 3   
-            juegoAleatorio();
             
+            system("pause");
+            break;
+
+        case 4:
+            // Lista de instrucciones de la opción 4   
+            juegoAleatorio();
+
             system("pause");
             break;
 
@@ -666,7 +736,7 @@ int main()
 
         case 2:
             // Lista de instrucciones de la opción 2                
-
+            juegoAleatorio();
             system("pause>nul"); // Pausa
             break;
 
