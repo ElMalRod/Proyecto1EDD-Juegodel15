@@ -152,9 +152,6 @@
     <ClInclude Include="matriz.h" />
     <ClInclude Include="Nodo.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\..\Archivo.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

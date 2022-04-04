@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <fstream>
 using namespace std;
+/*VARIABLES GLOBALES */
  // paramentros de la matiz en x y
 int columna = 0;
 int fila = 0;;
@@ -35,6 +36,7 @@ int correcto = 1;
 int contJugadores = -1;
 unsigned t0, t1;
 
+/*Metodo de Archivo prueba*/
 void archivo() {
     char cadena[128];
     int i;
@@ -46,24 +48,8 @@ void archivo() {
 
     }
     fe.close();
-   // ifstream Archivo;
-    //string nombre;
-    //Archivo.open("C:\Users\emili\OneDrive\Escritorio\PROYECTOS\Archivo.txt", ios::in); // abrimos en modo lectura
-
-    /*/if (Archivo.fail())
-    {
-        cout<<"No se puso leer el archivo" << endl;
-        exit(1);
-    }
-
-    while (!Archivo.eof()) // mientras no sea final del archivo
-    {
-        getline(Archivo, nombre);
-
-        cout << "El Nombre es "<<nombre<<endl;
-
-    }*/
 }
+/*Metodo de la creacion del tablero*/
 void crearTablero(int x, int y, int n) {
 
     //n indica si hay mas niveles
@@ -73,6 +59,8 @@ void crearTablero(int x, int y, int n) {
     
 
 }
+/*Metodo verificador Nos ayuda a filtrar los numeros ingresados
+para verficar que no sean repetidos atravez de listas*/
 bool verificador(int n) {
 
     for (int i = 0; i < listaManual.tamanio; i++) {
@@ -88,6 +76,8 @@ bool verificador(int n) {
     return false;
 
 }
+/*Metodo que ganar es un simple metodo que nos muestra el resultado de la partida
+y si es ganador imprime un letrero*/
 void ganar(Jugador j) {
     int pt = (datos + 1) *2;
     cout << "Puntos"<<j.puntos << " " << endl;
@@ -131,8 +121,8 @@ void ganar(Jugador j) {
     
 
 }
-
-
+/*Metodo aleatorios , Crea numeros aleatorios que posteriormente son ingresados a la
+lista con el fin de que no sean repetidos*/
 void aleatorios()
 {
     
@@ -163,10 +153,12 @@ void aleatorios()
     }
   
 }
-void guardarNivel()
+/*Metodo de Guardar Niveles es un metodo separado para que cree una nueva matriz con el fin
+de no sobre escribir*/
+void guardarNivel(int n)
 {
     MatrizOrtogonal* matriz; //crea el puntero a la matriz ortogonal
-    matriz = new MatrizOrtogonal(); //inicializacion de la matriz
+    matriz = new MatrizOrtogonal(n); //inicializacion de la matriz
 
     //for
     for (int i = 0; i < fila; i++)
@@ -247,7 +239,7 @@ void guardarNivel()
         }
     }
     //
-    matrices.InsertarFinal(matriz);
+    matrices.InsertarFinal(matriz,n);
 
 }
 void juegoNiveles()
@@ -255,7 +247,7 @@ void juegoNiveles()
     MatrizOrtogonal* matriz; //crea el puntero a la matriz ortogonal
     string nombre; //variable para guardar nombre del jugador
     int puntos, niveles = 0; //variable para guardar puntos y numero de niveles de partida
-    matriz = new MatrizOrtogonal(); //inicializacion de la matriz
+    matriz = new MatrizOrtogonal(0); //inicializacion de la matriz
 
     //pedir datos
     cout << "Ingrese Nombre del Jugador" << endl;
@@ -281,6 +273,7 @@ void juegoNiveles()
     jugar = true;
     listaManual.limpiar();
     listaInicial.limpiar();
+    matrices.LimpiarLista();
     cout << "RECUERDE MARCAR UN ESPACIO VACIO CON 0" << endl;
 
     //Guardar datos de los niveles
@@ -290,11 +283,11 @@ void juegoNiveles()
         {
             //matrices.InsertarFinal(matriz); // agregar matriz recien llenada a lista de matrices
             matriz->eliminar();// eliminar matriz
-            matriz = new MatrizOrtogonal();//inicializarla*/
+            matriz = new MatrizOrtogonal(i);//inicializarla*/
         }
         //for para ingresar datos
-        guardarNivel();
-        matrices.InsertarFinal(matriz);
+        guardarNivel(i);
+        matrices.InsertarFinal(matriz,i);
        
         cout << "Matriz "<<i<<" ingresada." << endl;
     }
@@ -327,14 +320,17 @@ void juegoNiveles()
             cout << "POSICION EN LA TABLA: " << listaReportes.DevolverPosicion(nombre) << endl;
 
             jugar = false;
-            //matriz->eliminar();
+            matriz->eliminar();
         }
         else {
             int num = stoi(n1);
             //matriz->movimiento(num);
             matrices.movimientos(num);
+            j.ingresarPuntos(matrices.sumarPuntos(datos + 1));
             matrices.ImprimirTablero();
+            ganar(j);
             pasos++;
+            cout << "Pasos: " << pasos << endl;
            
 
 
@@ -345,13 +341,15 @@ void juegoNiveles()
     }
 
 }
+/*Metodos de jugar basicamente son condiciones  que son validadas para sumar puntos 
+en el juego */
 void juegoAleatorio()
 {
     MatrizOrtogonal* matriz;
     string nombre;
     int puntos=0;
 
-    matriz = new MatrizOrtogonal();
+    matriz = new MatrizOrtogonal(0);
 
     //
     cout << "Ingrese Nombre del Jugador" << endl;
@@ -407,7 +405,7 @@ void juegoAleatorio()
         {
             
             matriz->eliminar(); //eliminar matriz actual
-            matriz = new MatrizOrtogonal();
+            matriz = new MatrizOrtogonal(0);
             c = 0;//limpiar contador
             correcto = 1;//
             //vacio = true;
@@ -473,7 +471,7 @@ void juegoManual()
     MatrizOrtogonal* matriz;
     string nombre;
     int puntos = 0;
-    matriz = new MatrizOrtogonal();
+    matriz = new MatrizOrtogonal(0);
     
     cout << "Ingrese Nombre del Jugador" << endl;
     cin >> nombre;
@@ -585,7 +583,7 @@ void juegoManual()
         if (n1 == "R" || n1 == "r")
         {
             matriz->eliminar(); //eliminar matriz actual
-            matriz = new MatrizOrtogonal();
+            matriz = new MatrizOrtogonal(0);
             c = 0;//limpiar contador
             correcto = 1;//
             //volver a cargar matriz inicial
@@ -650,7 +648,7 @@ void juegoManual()
 
 
 }
-
+/*Metodo del Menu es basicamente seleccionar para ingresar a las opciones del juego*/
 void menutablero() {
     
     //matrizInicial = new MatrizOrtogonal();
@@ -705,12 +703,12 @@ void menutablero() {
     } while (repetir);
 
 }
-
+/*Metodo Main*/
 int main()
 {
    // archivo();
     MatrizOrtogonal* matriz;
-    matriz = new MatrizOrtogonal();
+    matriz = new MatrizOrtogonal(0);
   
     int opcion;
     bool repetir = true;
@@ -759,5 +757,3 @@ int main()
 
     return 0;
 }
-
-

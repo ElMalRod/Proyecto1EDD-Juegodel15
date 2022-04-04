@@ -5,9 +5,6 @@
 
 
 using namespace std;
- //int xx;
- //int yy;
-///// NODO DEL CENTRO
 
 /* Esta esctructura es la que inicializa cada nodo nuevo*/ 
 typedef struct NodoCen
@@ -42,7 +39,7 @@ typedef struct NodoCen
 typedef struct ListaNodosCol
 {
     NodoCen* primero;
-    NodoCen* ultimo;
+    NodoCen* ultimo; 
     //Constructor
     ListaNodosCol()
     {
@@ -96,7 +93,7 @@ typedef struct ListaNodosCol
             }
         }
     }
-    //buscar nodo a mover pivote a numero
+    /*Metodo mover pivote este metodo hace el cambio con el dato a cambiar*/
     bool moverPivote(int n)
     {
 
@@ -120,6 +117,7 @@ typedef struct ListaNodosCol
         return false;
 
     }
+    /*Metodo existe pivote verifica que haya un pivote cuando hay varios niveles*/
     bool ExistePivote()
     {
         if (!vacio())
@@ -158,7 +156,7 @@ typedef struct ListaNodosCol
         return false;
     }
 
-    //cambiar bandera a cambiante
+    /*Metodo cambiar bandera cambia la bandera del dato que sera cambiado (cambiante)*/
     bool CambiarBandera (int n)
     {
         if (!vacio())
@@ -177,6 +175,7 @@ typedef struct ListaNodosCol
         }
         return false;
     }
+    /*Metodo regresa la posicion de X y Y en el pivote y en el dato, basicamente guarda el valor y lo regresa*/
     int RegresarPosicionPivoteX()
     {
 
@@ -197,7 +196,6 @@ typedef struct ListaNodosCol
         }
         return 0;
     }
-
     int RegresarPosicionPivoteY()
     {
         if (!vacio())
@@ -256,7 +254,7 @@ typedef struct ListaNodosCol
         }
         return 0;
     }
-
+     /*Metodo mover nodo . este metodo mueve el dato -> pivote para un nivel*/
     bool moverNodo(int n, int xx, int yy) //numero a pivote
     {
         if (!vacio())
@@ -281,6 +279,7 @@ typedef struct ListaNodosCol
         }
         return false;
     }
+    /*Metodo mover nodo entre niveles . este metodo mueve el dato -> pivote para un nivel*/
     bool moverNodoNiveles(int n)
     {
         if (!vacio())
@@ -306,6 +305,7 @@ typedef struct ListaNodosCol
         }
         return false;
     }
+    /*Metodo verificador este metodo verifica cada uno de las posiciones al rededor de pivote*/
     bool verificar(int n)
     {
         if (!vacio())
@@ -392,6 +392,7 @@ typedef struct ListaNodosCol
         return puntos;
 
     }
+        //sumar puntos niveles
     // Metodo Insertar
     void insertar(NodoCen* inserta)
     {
@@ -416,7 +417,6 @@ typedef struct ListaNodosCol
             }
         }
     }
-
     /*
         Metodos para Insertar
     */
@@ -1157,17 +1157,18 @@ typedef struct MatrizOrtogonal
     Cabeceras* c;
     Laterales* l;
     MatrizOrtogonal* siguiente;
+    int nivel;
     //variables globales jaja
     int xx = 0;
     int yy = 0;
 
-    MatrizOrtogonal()
+    MatrizOrtogonal(int n)
     {
 
         c = new Cabeceras();
         l = new Laterales();
         this->siguiente = NULL;
-        
+        this->nivel = n;
     }
     void insertar(int x, int y, int inserta, bool pivote, int posxy)
     {
@@ -1189,7 +1190,7 @@ typedef struct MatrizOrtogonal
         LatTemp->Filas->insertar(insercion);
         //cout << "Se inserto el valor: " << inserta << "<--- en la columna " << x << ", fila " << y << endl;
     }
-
+    /*ESTOS METODOS SON UNICAMENTE PARA LLAMAR A OTROS METODOS Y LOS VERIFICA , SON UTILIZADOS PARA LA JUGABILIDAD DE LA MATRIZ*/
     void imprimir()
     {
         

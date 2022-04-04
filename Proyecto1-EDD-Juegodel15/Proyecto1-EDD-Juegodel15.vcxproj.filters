@@ -48,9 +48,4 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\..\Archivo.txt">
-      <Filter>Archivos de origen</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

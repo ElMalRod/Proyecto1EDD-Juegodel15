@@ -15,8 +15,8 @@ public:
 	int xxD, yyD = 0; //posiciones de dato
 	ListaMatriz();
 	bool EstaVacia();
-	void InsertarVacia(MatrizOrtogonal* matriz);
-	void InsertarFinal(MatrizOrtogonal* matriz);
+	void InsertarVacia(MatrizOrtogonal* matriz, int n);
+	void InsertarFinal(MatrizOrtogonal* matriz, int n);
 	MatrizOrtogonal* ObtenerXpos(int pos);
 	void Recorrer();
 	void ImprimirTablero();
@@ -28,6 +28,9 @@ public:
 	void moverDatos(int n);
 	bool cambiarBadera(int n);
 	bool verificarMovimientosNormales(int n);
+	int sumarPuntos(int datos);
+	void LimpiarLista();
+	bool comprobarNivel();
 	
 
 };

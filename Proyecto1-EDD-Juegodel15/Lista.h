@@ -4,6 +4,8 @@
 #include <string>
 #include <cstdlib>
 using namespace std;
+/*Esta lista es utilizada para guardar los datos ingresados a la matriz
+tambien es utilizada para la lista de jugadores */
 class Lista
 {
 public:

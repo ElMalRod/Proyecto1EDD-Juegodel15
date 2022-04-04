@@ -13,6 +13,7 @@ Lista::Lista(int n)
 	this->finalJ = NULL;
 	this->tamanioJugadores=0;
 }
+/*Metodo recorrer para lista simple*/
 string Lista::Recorrer()
 {
 	string c = "";
@@ -33,7 +34,7 @@ string Lista::Recorrer()
 	}
 	return c;
 }
-
+/*Metodo vacia verificador de que la lista no venga o este vacia*/
 bool Lista::EstaVacia()
 {
 	if (this->frente == NULL && this->final == NULL)
@@ -45,7 +46,7 @@ bool Lista::EstaVacia()
 		return false;
 	}
 }
-
+/*Metodo vacia verificador de que la lista de jugadores no venga o este vacia*/
 bool Lista::EstaVaciaJugador()
 {
 	if (this->frente == NULL && this->final == NULL)
@@ -57,6 +58,7 @@ bool Lista::EstaVaciaJugador()
 		return false;
 	}
 }
+/*Metodo recorrer para lista simple de jugadores*/
 void Lista::RecorrerJugador()
 {
 	OrdenarJugadores();
@@ -77,6 +79,7 @@ void Lista::RecorrerJugador()
 	}
 
 }
+/*Inserta unicamente cuando es el primer dato*/
 void Lista::InsertarVacia(int valor)
 {
 	Nodo* nuevo = new Nodo();
@@ -87,7 +90,7 @@ void Lista::InsertarVacia(int valor)
 	this->tamanio++;
 
 }
-
+/*Inserta unicamente cuando es el primer dato*/
 void Lista::InsertarVaciaJugador(Jugador j, int pos)
 {
 	Jugador* nuevo = new Jugador(pos);
@@ -100,7 +103,7 @@ void Lista::InsertarVaciaJugador(Jugador j, int pos)
 	this->finalJ = nuevo;
 
 }
-
+/*Inserta datos al final de la lista*/
 void Lista::InsertarFinal(int valor)
 {
 	if (EstaVacia() == true)
@@ -119,7 +122,7 @@ void Lista::InsertarFinal(int valor)
 
 	}
 }
-
+/*Inserta datos al final de la lista*/
 void Lista::InsertarFinalJugador(Jugador j, int pos)
 {
 	if (EstaVaciaJugador() == true)
@@ -142,7 +145,7 @@ void Lista::InsertarFinalJugador(Jugador j, int pos)
 
 	}
 }
-
+/*Metodo para obtener por posicion el valor de la lista*/
 int Lista::ObtenerXpos(int pos)
 {
 	Nodo* aux = this->frente;
@@ -165,6 +168,7 @@ int Lista::ObtenerXpos(int pos)
 	}
 
 }
+/*Metodo de ordenamiento para los reportes de los jugadores*/
 void Lista::OrdenarJugadores()
 {
 	int temp;
@@ -206,7 +210,8 @@ void Lista::OrdenarJugadores()
 		printf("\n\t La lista esta vacia...");
 	
 }
-
+/*Metodo que nos devuele el valor de la posicion para poder se cambiados
+si existen datos mayores o menores*/
 int Lista::DevolverPosicion(string nombre)
 {
 	int temp;
@@ -249,6 +254,7 @@ int Lista::DevolverPosicion(string nombre)
 		printf("\n\t La lista esta vacia...");
 	return i;
 }
+/*Metodo limpiador , vacia la lista */
 void Lista::limpiar()
 {
 	this->frente = NULL;

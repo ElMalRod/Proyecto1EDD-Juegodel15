@@ -4,7 +4,8 @@
 #include <cstdlib>
 
 using namespace std;
-
+/*Objeto Jugador que almacena los datos , datos los cuales se guardan en una lista
+para se mostrados en los reportes*/
 Jugador::Jugador(int pos)
 {
 	
@@ -14,7 +15,6 @@ Jugador::Jugador(int pos)
 	this->posicion = pos;
 	this->siguiente = NULL;
 }
-
  void Jugador::ingresardatos( string nombre, int puntos, double tiempo)
 {
 	 
@@ -23,7 +23,6 @@ Jugador::Jugador(int pos)
 	 this->tiempo = tiempo;
 	 this->siguiente = NULL;//ojo
 }
-
 void Jugador::ingresarPuntos(int p)
 {
 	puntos = p;
