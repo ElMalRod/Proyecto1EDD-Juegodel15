@@ -87,6 +87,7 @@ void ListaMatriz::ImprimirTablero()
 	while (aux != NULL)
 	{
 		aux->imprimir();
+
 		cout << "---------------------------------------" << endl;
 		aux = aux->siguiente;
 

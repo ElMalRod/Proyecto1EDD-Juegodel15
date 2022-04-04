@@ -80,7 +80,7 @@ bool verificador(int n) {
 y si es ganador imprime un letrero*/
 void ganar(Jugador j) {
     int pt = (datos + 1) *2;
-    cout << "Puntos"<<j.puntos << " " << endl;
+    cout << "Puntos "<<j.puntos << " " << endl;
     if (j.puntos == pt)
     {
         cout << "####################################################################################################" << endl;

@@ -1193,9 +1193,7 @@ typedef struct MatrizOrtogonal
     /*ESTOS METODOS SON UNICAMENTE PARA LLAMAR A OTROS METODOS Y LOS VERIFICA , SON UTILIZADOS PARA LA JUGABILIDAD DE LA MATRIZ*/
     void imprimir()
     {
-        
-        c->imprimir();
-        
+        c->imprimir(); 
     }
 
     void movimiento(int n)
