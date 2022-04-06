@@ -11,6 +11,7 @@
 #include <ctime>
 #include <string>
 #include <stdio.h>
+#include <sstream>
 #include <fstream>
 using namespace std;
 /*VARIABLES GLOBALES */
@@ -26,7 +27,7 @@ Lista listaAle = Lista();// Lista donde se guardan los numeros aleatoreos
 Lista listaInicial = Lista();// Lista donde se guardan los numeros de la matriz inicial para poder reinciar.
 Lista listaReportes = Lista(0);
 ListaMatriz matrices = ListaMatriz();
-
+ListaMatriz matrices2 = ListaMatriz();// lista para reiniciar el juego
 int cont = 0;
 int c = 0;
 bool vacio = false;
@@ -36,26 +37,113 @@ int correcto = 1;
 int contJugadores = -1;
 unsigned t0, t1;
 
-/*Metodo de Archivo prueba*/
-void archivo() {
-    char cadena[128];
-    int i;
-    ifstream fe("C:/Users/emili/OneDrive/Escritorio/PROYECTOS/Archivo.txt");
-    while (!fe.eof()) {
-        fe >> cadena;
-        fe  >> i;
-        cout << cadena <<i<< endl;
 
-    }
-    fe.close();
-}
 /*Metodo de la creacion del tablero*/
+
+
+void guardarNivelesArchivo(Lista lista,int n)
+{
+    MatrizOrtogonal* matriz; //crea el puntero a la matriz ortogonal
+    matriz = new MatrizOrtogonal(n); //inicializacion de la matriz
+    c = 0;//limpiar contador
+    for (int i = 0; i < fila; i++)
+    {
+        for (int a = 0; a < columna; a++)
+        {
+            if (lista.ObtenerXpos(c) == 0)
+            {
+                vacio = true;
+                matriz->insertar(i, a, lista.ObtenerXpos(c), true, correcto);
+
+
+            }
+            else {
+                matriz->insertar(i, a, lista.ObtenerXpos(c), false, correcto);
+            }
+            correcto++;
+            c++;
+
+        }
+    }
+    matrices.InsertarFinal(matriz, n);
+    matrices2.InsertarFinal(matriz,n);
+    matriz->eliminar();
+}
+
+
 void crearTablero(int x, int y, int n) {
 
     //n indica si hay mas niveles
     fila = x;
     columna = y;
     datos = ((x * y)*n) - 1;
+    
+
+}
+void lectura() {
+    correcto = 1;
+    ifstream archivo("C:/Users/emili/OneDrive/Escritorio/tablero.txt");
+    string linea;
+    char delimitador = ',';
+    char igual = '=';
+    char pts = ':';
+    int valor = 0;
+    int nivel = 0;
+    int aux = 0;
+    Lista ListaM = Lista();
+    // Leemos todas las líneas
+
+    while (getline(archivo, linea))
+    {
+        stringstream stream(linea); // Convertir la cadena a un stream
+        stringstream numero;
+        string f, c, x, y, dato;
+        // Extraer todos los valores de esa fila
+        if (cont < 2)
+        {
+            if (cont == 0)
+            {
+                getline(stream, f, pts);
+                numero << f;
+                numero >> fila;
+                cout << "filas: " << fila << endl;
+            }
+            if (cont == 1)
+            {
+                getline(stream, c, pts);
+                numero << c;
+                numero >> columna;
+                cout << "columnas: " << columna << endl;
+                aux = (fila * columna);
+            }
+        }
+        else {
+            if (cont == (aux + 2) || cont == (aux * 2) + 2 || cont == (aux * 3) + 2)
+            {
+                //limpiar lista y mandar la anterior
+                cout << "NUEVO NIVEL---------------------------" << nivel << endl;
+                guardarNivelesArchivo(ListaM, nivel);
+                nivel++;
+                ListaM.limpiar();
+
+            }
+            getline(stream, x, delimitador);
+            getline(stream, y, igual);
+            getline(stream, dato);
+            numero << dato;
+            numero >> valor;
+            ListaM.InsertarFinal(valor);
+            cout << "x: " << x << endl;
+            cout << "y: " << y << endl;
+            cout << "dato: " << valor << endl;
+            //cout << cont << endl;
+        }
+        cont++;
+
+    }
+
+    archivo.close();
+    crearTablero(fila, columna, nivel);
     
 
 }
@@ -80,6 +168,7 @@ bool verificador(int n) {
 y si es ganador imprime un letrero*/
 void ganar(Jugador j) {
     int pt = (datos + 1) *2;
+    //cout << pt << endl;
     cout << "Puntos "<<j.puntos << " " << endl;
     if (j.puntos == pt)
     {
@@ -321,6 +410,7 @@ void juegoNiveles()
 
             jugar = false;
             matriz->eliminar();
+            system("pause");
         }
         else {
             int num = stoi(n1);
@@ -648,6 +738,72 @@ void juegoManual()
 
 
 }
+void jugarArchivo()
+{
+    //pedir datos
+    string nombre;
+    cout << "Ingrese Nombre del Jugador" << endl;
+    cin >> nombre;
+
+    int puntos, niveles = 0; //variable para guardar puntos y numero de niveles de partida
+    contJugadores++;// aumentar contador de jugadores
+    Jugador j = Jugador(contJugadores); //creador de jugador
+    j.ingresardatos(nombre, 0, 0);//Guardar datos de jugador
+    jugar = true;
+    listaManual.limpiar();
+    listaInicial.limpiar();
+    matrices.LimpiarLista(); 
+    pasos = 0;
+    //leer el archivo
+    lectura();
+    //imprimir matriz
+    matrices.ImprimirTablero();
+    while (jugar == true)
+    {
+        cout << "Ingrese Numero que desea mover " << endl;    cout << "                                                    PRESIONE R para Reiniciar " << endl;
+        cout << "                                                    PRESIONE S para Terminar " << endl;
+        cout << "                                                    PRESIONE A para Autocompletar " << endl;
+        cin >> n1;
+
+        if (n1 == "R" || n1 == "r")
+        {
+
+           // cout << "pendiente" << endl;
+
+        }
+        else if (n1 == "S" || n1 == "s")
+        {
+            t1 = clock();
+            double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+            j.ingresarTiempo(time);
+            listaReportes.InsertarFinalJugador(j, contJugadores);
+            cout << "----- END GAME!!!! -----" << endl;
+            cout << "NOMBRE: " << j.nombre << endl;
+            cout << "PUNTOS: " << j.puntos << endl;
+            cout << "PASOS: " << pasos << endl;
+            cout << "TIEMPO: " << j.tiempo << ".seg" << endl;
+            cout << "POSICION EN LA TABLA: " << listaReportes.DevolverPosicion(nombre) << endl;
+
+            jugar = false;
+        }
+        else {
+            int num = stoi(n1);
+            //matriz->movimiento(num);
+            matrices.movimientos(num);
+            j.ingresarPuntos(matrices.sumarPuntos(datos+1));
+            matrices.ImprimirTablero();
+            ganar(j);
+            pasos++;
+            cout << "Pasos: " << pasos << endl;
+
+
+
+
+        }
+
+
+    }
+}
 /*Metodo del Menu es basicamente seleccionar para ingresar a las opciones del juego*/
 void menutablero() {
     
@@ -685,7 +841,7 @@ void menutablero() {
 
         case 3:
             // Lista de instrucciones de la opción 3   
-            
+            jugarArchivo();
             system("pause");
             break;
 

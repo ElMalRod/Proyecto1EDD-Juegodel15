@@ -189,7 +189,7 @@ bool ListaMatriz::comprobarNivel()
 realiza el cambio del dato*/
 void ListaMatriz::movimientosNiveles(int n)
 {
-	
+	//cout << "movi entre niveles" << endl;
 	if (guardarPiv()==true && guardarDato(n)==true)
 	{
 		if ((xxP== xxD) && (yyP==yyD) )

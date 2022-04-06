@@ -81,11 +81,11 @@ typedef struct ListaNodosCol
             {
                 if (temporal->dato<10)
                 {
-                    cout << "| " << temporal->dato << "    |  ";
+                    cout << "| " << temporal->dato << "    |  ";//<<temporal->posxy
                 }
                 else
                 {
-                    cout << "| " << temporal->dato << "   |  ";
+                    cout << "| " << temporal->dato << "   |  " ;
                 }
                 
                 
@@ -666,11 +666,12 @@ typedef struct Cabeceras
         }
     }
     //imprimir
-    void imprimir()
+    void imprimir(int nivel)
     {
         if (!vacio())
         {
             NodoCab* temporal = primero;
+            cout << "NIVEL: " << nivel << endl;
             cout << "---------------" << endl;
             while (temporal != NULL)
             {
@@ -1193,7 +1194,8 @@ typedef struct MatrizOrtogonal
     /*ESTOS METODOS SON UNICAMENTE PARA LLAMAR A OTROS METODOS Y LOS VERIFICA , SON UTILIZADOS PARA LA JUGABILIDAD DE LA MATRIZ*/
     void imprimir()
     {
-        c->imprimir(); 
+        
+        c->imprimir(nivel+1); 
     }
 
     void movimiento(int n)

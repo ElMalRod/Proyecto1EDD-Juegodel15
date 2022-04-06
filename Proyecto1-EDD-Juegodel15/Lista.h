@@ -27,7 +27,6 @@ public:
 	void InsertarFinal(int valor);
 	void OrdenarJugadores();
 	void InsertarFinalJugador(Jugador j, int pos);
-	void ReporteOrdenJugadores();
 	int DevolverPosicion(string nombre);
 	void limpiar();
 
