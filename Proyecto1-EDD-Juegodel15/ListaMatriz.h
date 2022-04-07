@@ -18,7 +18,6 @@ public:
 	void InsertarVacia(MatrizOrtogonal* matriz, int n);
 	void InsertarFinal(MatrizOrtogonal* matriz, int n);
 	MatrizOrtogonal* ObtenerXpos(int pos);
-	void Recorrer();
 	void ImprimirTablero();
 	void movimientos(int n);
 	void movimientosNiveles(int n);

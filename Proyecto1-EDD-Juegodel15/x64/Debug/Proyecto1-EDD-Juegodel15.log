@@ -1,2 +1,7 @@
-﻿  ListaMatriz.cpp
+﻿  Proyecto1-EDD-Juegodel15.cpp
+C:\Users\emili\OneDrive\Escritorio\PROYECTOS\EstructuraDeDatos\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15.cpp(217,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\emili\OneDrive\Escritorio\PROYECTOS\EstructuraDeDatos\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15.cpp(336,9): warning C4101: 'puntos': variable local sin referencia
+C:\Users\emili\OneDrive\Escritorio\PROYECTOS\EstructuraDeDatos\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15.cpp(749,9): warning C4101: 'puntos': variable local sin referencia
+C:\Users\emili\OneDrive\Escritorio\PROYECTOS\EstructuraDeDatos\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15\matriz.h(716): warning C4715: 'Cabeceras::existe': no todas las rutas de acceso de control devuelven un valor
+C:\Users\emili\OneDrive\Escritorio\PROYECTOS\EstructuraDeDatos\Proyecto1-EDD-Juegodel15\Proyecto1-EDD-Juegodel15\matriz.h(1131): warning C4715: 'Laterales::existe': no todas las rutas de acceso de control devuelven un valor
   Proyecto1-EDD-Juegodel15.vcxproj -> C:\Users\emili\OneDrive\Escritorio\PROYECTOS\EstructuraDeDatos\Proyecto1-EDD-Juegodel15\x64\Debug\Proyecto1-EDD-Juegodel15.exe

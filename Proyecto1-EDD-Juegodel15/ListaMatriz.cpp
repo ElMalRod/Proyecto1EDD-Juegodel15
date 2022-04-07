@@ -350,4 +350,7 @@ void ListaMatriz::LimpiarLista()
 {
 	this->frente = NULL;
 	this->final = NULL;
+	niveles=0;
+	xxP, yyP = 0; 
+	xxD, yyD = 0;
 }

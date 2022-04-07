@@ -27,7 +27,6 @@ Lista listaAle = Lista();// Lista donde se guardan los numeros aleatoreos
 Lista listaInicial = Lista();// Lista donde se guardan los numeros de la matriz inicial para poder reinciar.
 Lista listaReportes = Lista(0);
 ListaMatriz matrices = ListaMatriz();
-ListaMatriz matrices2 = ListaMatriz();// lista para reiniciar el juego
 int cont = 0;
 int c = 0;
 bool vacio = false;
@@ -39,7 +38,6 @@ unsigned t0, t1;
 
 
 /*Metodo de la creacion del tablero*/
-
 
 void guardarNivelesArchivo(Lista lista,int n)
 {
@@ -66,11 +64,8 @@ void guardarNivelesArchivo(Lista lista,int n)
         }
     }
     matrices.InsertarFinal(matriz, n);
-    matrices2.InsertarFinal(matriz,n);
     matriz->eliminar();
 }
-
-
 void crearTablero(int x, int y, int n) {
 
     //n indica si hay mas niveles
@@ -90,6 +85,7 @@ void lectura() {
     int valor = 0;
     int nivel = 0;
     int aux = 0;
+    cont = 0;
     Lista ListaM = Lista();
     // Leemos todas las líneas
 
@@ -329,6 +325,7 @@ void guardarNivel(int n)
     }
     //
     matrices.InsertarFinal(matriz,n);
+    matriz->eliminar();
 
 }
 void juegoNiveles()
@@ -429,6 +426,7 @@ void juegoNiveles()
 
 
     }
+    matriz->eliminar();
 
 }
 /*Metodos de jugar basicamente son condiciones  que son validadas para sumar puntos 
@@ -740,6 +738,8 @@ void juegoManual()
 }
 void jugarArchivo()
 {
+    MatrizOrtogonal* matriz; //crea el puntero a la matriz ortogonal
+    matriz = new MatrizOrtogonal(0); //inicializacion de la matriz
     //pedir datos
     string nombre;
     cout << "Ingrese Nombre del Jugador" << endl;
@@ -752,7 +752,6 @@ void jugarArchivo()
     jugar = true;
     listaManual.limpiar();
     listaInicial.limpiar();
-    matrices.LimpiarLista(); 
     pasos = 0;
     //leer el archivo
     lectura();
@@ -783,7 +782,7 @@ void jugarArchivo()
             cout << "PASOS: " << pasos << endl;
             cout << "TIEMPO: " << j.tiempo << ".seg" << endl;
             cout << "POSICION EN LA TABLA: " << listaReportes.DevolverPosicion(nombre) << endl;
-
+            matriz->eliminar();
             jugar = false;
         }
         else {
@@ -835,12 +834,14 @@ void menutablero() {
 
         case 2:
             // Lista de instrucciones de la opción 2                
-            
+    
             juegoNiveles();
             break;
 
         case 3:
             // Lista de instrucciones de la opción 3   
+            matrices.LimpiarLista();
+          
             jugarArchivo();
             system("pause");
             break;
